@@ -13,7 +13,7 @@ const contactLinks = [
     icon: Mail,
     label: 'Email',
     value: 'student@mdx.ac.ae',
-    href: 'mailto:student@mdx.ac.ae',
+    href: 'mailto:student@mdx.ac.ae.uk',
   },
   {
     icon: Github,
@@ -42,10 +42,10 @@ export function ContactContent() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
-    
+
     // Simulate form submission
     await new Promise((resolve) => setTimeout(resolve, 1000))
-    
+
     setIsSubmitting(false)
     setIsSubmitted(true)
   }
@@ -63,8 +63,8 @@ export function ContactContent() {
           Get in Touch
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Interested in learning more about A.E.G.I.S. or exploring collaboration opportunities? 
-          I would love to hear from you. Whether you are a fellow researcher, potential industry partner, 
+          Interested in learning more about A.E.G.I.S. or exploring collaboration opportunities?
+          I would love to hear from you. Whether you are a fellow researcher, potential industry partner,
           or simply curious about the project, please do not hesitate to reach out.
         </p>
       </motion.header>
@@ -202,9 +202,9 @@ export function ContactContent() {
           <div className="p-6 rounded-xl bg-card border border-border">
             <h3 className="font-semibold mb-2">Project Inquiries Welcome</h3>
             <p className="text-sm text-muted-foreground">
-              I am open to discussing research collaborations, industry partnerships, 
-              or academic inquiries about the A.E.G.I.S. project. Whether you represent 
-              a healthcare facility, research institution, or are a fellow student interested 
+              I am open to discussing research collaborations, industry partnerships,
+              or academic inquiries about the A.E.G.I.S. project. Whether you represent
+              a healthcare facility, research institution, or are a fellow student interested
               in similar work, I would be glad to connect.
             </p>
           </div>
