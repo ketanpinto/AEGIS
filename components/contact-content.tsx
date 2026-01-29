@@ -13,7 +13,7 @@ const contactLinks = [
     icon: Mail,
     label: 'Email',
     value: 'student@mdx.ac.ae',
-    href: 'mailto:student@mdx.ac.ae.uk',
+    href: 'mailto:student@mdx.ac.ae',
   },
   {
     icon: Github,
