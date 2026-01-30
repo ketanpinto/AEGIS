@@ -113,7 +113,7 @@ export function ProjectContent() {
               Final Year Project 2026
             </Badge>
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-              <span className="text-gradient">A.E.G.I.S.</span>
+              <span className="text-gradient">A.E.G.I.S</span>
             </h1>
             <p className="text-xl text-muted-foreground mb-2">
               Autonomous Elderly Guardian & Intelligent Sensing
@@ -206,7 +206,7 @@ export function ProjectContent() {
           <motion.div variants={itemVariants} className="text-center mb-12">
             <h2 className="font-display text-3xl font-bold mb-4">Our Solution</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              A.E.G.I.S. combines Wi-Fi sensing with mmWave radar to provide comprehensive,
+              A.E.G.I.S combines Wi-Fi sensing with mmWave radar to provide comprehensive,
               privacy-preserving elderly monitoring.
             </p>
           </motion.div>
@@ -310,7 +310,7 @@ export function ProjectContent() {
           <motion.div variants={itemVariants} className="text-center mb-12">
             <h2 className="font-display text-3xl font-bold mb-4">Development Timeline</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Track the progress of A.E.G.I.S. throughout the academic year.
+              Track the progress of A.E.G.I.S throughout the academic year.
             </p>
           </motion.div>
 

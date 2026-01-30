@@ -47,7 +47,7 @@ export function Footer() {
                 <Terminal className="w-4 h-4" />
               </div>
               <span className="font-display text-lg font-bold tracking-tight">
-                A.E.G.I.S.
+                A.E.G.I.S
               </span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed mb-4">
@@ -117,7 +117,7 @@ export function Footer() {
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            {new Date().getFullYear()} A.E.G.I.S. Middlesex University Dubai - Final Year Project.
+            {new Date().getFullYear()} A.E.G.I.S Middlesex University Dubai - Final Year Project.
           </p>
           <p className="text-sm text-muted-foreground">
             Built with{' '}

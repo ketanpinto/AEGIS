@@ -2,9 +2,10 @@
 
 import * as React from 'react'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion, Variants } from 'framer-motion'
 import { ArrowRight, Github, Linkedin, Mail } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Magnetic, TextReveal, Tilt, AnimatedGradientText, InteractiveGlow } from '@/components/motion-utils'
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -17,36 +18,45 @@ const containerVariants = {
   },
 }
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: 'easeOut' },
+    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
   },
 }
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <InteractiveGlow />
       {/* Animated background grid */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+
+        {/* Grid pulse effect */}
+        <motion.div
+          animate={{ opacity: [0.1, 0.3, 0.1] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,var(--primary)_0%,transparent_50%)] opacity-10"
+        />
+
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5 }}
-          className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px]"
+          className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/20 rounded-full blur-[160px]"
         />
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5, delay: 0.2 }}
-          className="absolute bottom-1/4 left-1/3 w-[400px] h-[400px] bg-accent/10 rounded-full blur-[100px]"
+          className="absolute bottom-1/4 left-1/3 w-[600px] h-[600px] bg-accent/20 rounded-full blur-[140px]"
         />
       </div>
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pt-40 pb-20">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -66,20 +76,20 @@ export function HeroSection() {
               Final Year Project
             </motion.div>
 
-            <motion.h1
-              variants={itemVariants}
-              className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight"
-            >
-              <span className="text-balance">
-                <span className="text-gradient">A.E.G.I.S.</span>
-              </span>
-            </motion.h1>
+            <div className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight relative z-10">
+              <TextReveal
+                text="A.E.G.I.S"
+                initialDelay={0.4}
+                animateGradient={true}
+                className="justify-center lg:justify-start"
+              />
+            </div>
 
             <motion.p
               variants={itemVariants}
               className="mt-6 text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed"
             >
-              A.E.G.I.S. - Autonomous Elderly Guardian & Intelligent Sensing.
+              A.E.G.I.S - Autonomous Elderly Guardian & Intelligent Sensing.
               <br />
               A device-free fall detection system using Wi-Fi CSI and mmWave sensor fusion
               for privacy-preserving vital monitoring.
@@ -89,15 +99,19 @@ export function HeroSection() {
               variants={itemVariants}
               className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-4"
             >
-              <Button asChild size="lg" className="group">
-                <Link href="/blog">
-                  Read Articles
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg">
-                <Link href="/projects">View Projects</Link>
-              </Button>
+              <Magnetic strength={0.2}>
+                <Button asChild size="lg" className="group">
+                  <Link href="/blog">
+                    Read Articles
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </Button>
+              </Magnetic>
+              <Magnetic strength={0.2}>
+                <Button asChild variant="outline" size="lg">
+                  <Link href="/projects">View Projects</Link>
+                </Button>
+              </Magnetic>
             </motion.div>
 
             <motion.div
@@ -137,84 +151,86 @@ export function HeroSection() {
             variants={itemVariants}
             className="flex-1 w-full max-w-xl"
           >
-            <div className="relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-accent/20 rounded-2xl blur-xl opacity-70" />
-              <div className="relative glass rounded-xl overflow-hidden">
-                {/* Window header */}
-                <div className="flex items-center gap-2 px-4 py-3 bg-secondary/50 border-b border-border">
-                  <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-destructive/60" />
-                    <div className="w-3 h-3 rounded-full bg-chart-4/60" />
-                    <div className="w-3 h-3 rounded-full bg-chart-2/60" />
+            <Tilt>
+              <div className="relative">
+                <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-accent/20 rounded-2xl blur-xl opacity-70" />
+                <div className="relative glass rounded-xl overflow-hidden">
+                  {/* Window header */}
+                  <div className="flex items-center gap-2 px-4 py-3 bg-secondary/50 border-b border-border">
+                    <div className="flex gap-1.5">
+                      <div className="w-3 h-3 rounded-full bg-destructive/60" />
+                      <div className="w-3 h-3 rounded-full bg-chart-4/60" />
+                      <div className="w-3 h-3 rounded-full bg-chart-2/60" />
+                    </div>
+                    <span className="text-xs text-muted-foreground font-mono ml-2">
+                      aegis.py
+                    </span>
                   </div>
-                  <span className="text-xs text-muted-foreground font-mono ml-2">
-                    aegis.py
-                  </span>
-                </div>
-                {/* Code content */}
-                <div className="p-4 font-mono text-sm">
-                  <CodeLine delay={0.5} lineNumber={1}>
-                    <span className="text-chart-3">class</span>{' '}
-                    <span className="text-accent">AEGIS</span>
-                    <span className="text-muted-foreground">:</span>
-                  </CodeLine>
-                  <CodeLine delay={0.7} lineNumber={2}>
-                    {'  '}
-                    <span className="text-chart-3">def</span>{' '}
-                    <span className="text-primary">detect_fall</span>
-                    <span className="text-muted-foreground">(</span>
-                    <span className="text-accent">self</span>
-                    <span className="text-muted-foreground">,</span>{' '}
-                    <span className="text-accent">csi_data</span>
-                    <span className="text-muted-foreground">):</span>
-                  </CodeLine>
-                  <CodeLine delay={0.9} lineNumber={3}>
-                    {'    '}
-                    <span className="text-muted-foreground"># Wi-Fi CSI Analysis</span>
-                  </CodeLine>
-                  <CodeLine delay={1.1} lineNumber={4}>
-                    {'    '}
-                    <span className="text-accent">features</span>{' '}
-                    <span className="text-muted-foreground">=</span>{' '}
-                    <span className="text-chart-2">self</span>
-                    <span className="text-muted-foreground">.</span>
-                    <span className="text-primary">extract</span>
-                    <span className="text-muted-foreground">(</span>
-                    <span className="text-accent">csi_data</span>
-                    <span className="text-muted-foreground">)</span>
-                  </CodeLine>
-                  <CodeLine delay={1.3} lineNumber={5}>
-                    {'    '}
-                    <span className="text-chart-3">if</span>{' '}
-                    <span className="text-chart-2">self</span>
-                    <span className="text-muted-foreground">.</span>
-                    <span className="text-primary">is_fall</span>
-                    <span className="text-muted-foreground">(</span>
-                    <span className="text-accent">features</span>
-                    <span className="text-muted-foreground">):</span>
-                  </CodeLine>
-                  <CodeLine delay={1.5} lineNumber={6}>
-                    {'      '}
-                    <span className="text-chart-2">self</span>
-                    <span className="text-muted-foreground">.</span>
-                    <span className="text-primary">check_vitals</span>
-                    <span className="text-muted-foreground">()</span>
-                  </CodeLine>
-                  <CodeLine delay={1.7} lineNumber={7}>
-                    {'      '}
-                    <span className="text-chart-2">self</span>
-                    <span className="text-muted-foreground">.</span>
-                    <span className="text-primary">alert_caregiver</span>
-                    <span className="text-muted-foreground">()</span>
-                  </CodeLine>
-                  <CodeLine delay={1.9} lineNumber={8}>
-                    {'    '}
-                    <span className="text-chart-3">return</span>{' '}
-                    <span className="text-chart-4">True</span>
-                  </CodeLine>
+                  {/* Code content */}
+                  <div className="p-4 font-mono text-sm">
+                    <CodeLine delay={0.5} lineNumber={1}>
+                      <span className="text-chart-3">class</span>{' '}
+                      <span className="text-accent">AEGIS</span>
+                      <span className="text-muted-foreground">:</span>
+                    </CodeLine>
+                    <CodeLine delay={0.7} lineNumber={2}>
+                      {'  '}
+                      <span className="text-chart-3">def</span>{' '}
+                      <span className="text-primary">detect_fall</span>
+                      <span className="text-muted-foreground">(</span>
+                      <span className="text-accent">self</span>
+                      <span className="text-muted-foreground">,</span>{' '}
+                      <span className="text-accent">csi_data</span>
+                      <span className="text-muted-foreground">):</span>
+                    </CodeLine>
+                    <CodeLine delay={0.9} lineNumber={3}>
+                      {'    '}
+                      <span className="text-muted-foreground"># Wi-Fi CSI Analysis</span>
+                    </CodeLine>
+                    <CodeLine delay={1.1} lineNumber={4}>
+                      {'    '}
+                      <span className="text-accent">features</span>{' '}
+                      <span className="text-muted-foreground">=</span>{' '}
+                      <span className="text-chart-2">self</span>
+                      <span className="text-muted-foreground">.</span>
+                      <span className="text-primary">extract</span>
+                      <span className="text-muted-foreground">(</span>
+                      <span className="text-accent">csi_data</span>
+                      <span className="text-muted-foreground">)</span>
+                    </CodeLine>
+                    <CodeLine delay={1.3} lineNumber={5}>
+                      {'    '}
+                      <span className="text-chart-3">if</span>{' '}
+                      <span className="text-chart-2">self</span>
+                      <span className="text-muted-foreground">.</span>
+                      <span className="text-primary">is_fall</span>
+                      <span className="text-muted-foreground">(</span>
+                      <span className="text-accent">features</span>
+                      <span className="text-muted-foreground">):</span>
+                    </CodeLine>
+                    <CodeLine delay={1.5} lineNumber={6}>
+                      {'      '}
+                      <span className="text-chart-2">self</span>
+                      <span className="text-muted-foreground">.</span>
+                      <span className="text-primary">check_vitals</span>
+                      <span className="text-muted-foreground">()</span>
+                    </CodeLine>
+                    <CodeLine delay={1.7} lineNumber={7}>
+                      {'      '}
+                      <span className="text-chart-2">self</span>
+                      <span className="text-muted-foreground">.</span>
+                      <span className="text-primary">alert_caregiver</span>
+                      <span className="text-muted-foreground">()</span>
+                    </CodeLine>
+                    <CodeLine delay={1.9} lineNumber={8}>
+                      {'    '}
+                      <span className="text-chart-3">return</span>{' '}
+                      <span className="text-chart-4">True</span>
+                    </CodeLine>
+                  </div>
                 </div>
               </div>
-            </div>
+            </Tilt>
           </motion.div>
         </motion.div>
       </div>

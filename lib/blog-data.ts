@@ -26,7 +26,7 @@ export const blogPosts: BlogPost[] = [
   {
     slug: 'week-1-project-inception-hardware-selection',
     title: 'Week 1: Project Inception & Hardware Selection',
-    excerpt: 'The beginning of A.E.G.I.S. - choosing Wi-Fi CSI over cameras for privacy-preserving fall detection.',
+    excerpt: 'The beginning of A.E.G.I.S - choosing Wi-Fi CSI over cameras for privacy-preserving fall detection.',
     content: `
 ## Objectives for the Week
 
@@ -374,10 +374,10 @@ class CSIProcessor:
 export const projects: Project[] = [
   {
     slug: 'aegis-fall-detection',
-    title: 'A.E.G.I.S. - Fall Detection System',
+    title: 'A.E.G.I.S - Fall Detection System',
     description: 'Privacy-preserving fall detection using Wi-Fi CSI and mmWave sensor fusion.',
     longDescription: `
-A.E.G.I.S. (Autonomous Elderly Guardian & Intelligent Sensing) is a comprehensive fall detection and vital monitoring system designed for elderly care facilities and home environments.
+A.E.G.I.S (Autonomous Elderly Guardian & Intelligent Sensing) is a comprehensive fall detection and vital monitoring system designed for elderly care facilities and home environments.
 
 ## The Problem
 
@@ -388,7 +388,7 @@ Elderly falls are a leading cause of injury-related deaths. Current solutions ha
 
 ## Our Solution
 
-A.E.G.I.S. uses commodity Wi-Fi signals to detect falls by analyzing wave distortions caused by human movement. Combined with mmWave radar for vital sign monitoring, it provides comprehensive, privacy-preserving elderly monitoring.
+A.E.G.I.S uses commodity Wi-Fi signals to detect falls by analyzing wave distortions caused by human movement. Combined with mmWave radar for vital sign monitoring, it provides comprehensive, privacy-preserving elderly monitoring.
 
 ## Key Features
 
@@ -462,7 +462,7 @@ A vital signs monitoring module using the LD2410 mmWave radar sensor.
 - Breathing rate detection
 - Presence detection
 - Unconsciousness detection (absence of breathing)
-- Integration with main A.E.G.I.S. system
+- Integration with main A.E.G.I.S system
 
 ## Technical Details
 

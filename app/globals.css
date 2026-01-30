@@ -169,9 +169,18 @@
   .animate-glow {
     animation: glow 2s ease-in-out infinite alternate;
   }
+  .animate-gradient-flow {
+    animation: gradient-flow 5s linear infinite;
+  }
   .font-display {
     font-family: var(--font-display);
   }
+}
+
+@keyframes gradient-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 @keyframes glow {

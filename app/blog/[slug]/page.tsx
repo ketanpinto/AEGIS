@@ -18,7 +18,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params
   const post = getPostBySlug(slug)
-  
+
   if (!post) {
     return {
       title: 'Post Not Found',
@@ -53,9 +53,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navigation />
-      
-      <main className="flex-1 pt-24 pb-16">
+
+      <main className="flex-1 pt-40 pb-16">
         <BlogPostContent post={post} />
       </main>
 

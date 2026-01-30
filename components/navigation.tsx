@@ -4,7 +4,7 @@ import * as React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Terminal } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/theme-toggle'
@@ -35,88 +35,99 @@ export function Navigation() {
 
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4">
-        <motion.header
+      <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center p-4 sm:p-6 pointer-events-none">
+        <motion.div
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
           className={cn(
-            'w-full max-w-3xl rounded-full border transition-all duration-300',
+            "w-full max-w-4xl rounded-2xl border transition-all duration-500 ease-in-out pointer-events-auto",
             isScrolled
-              ? 'glass-strong shadow-lg shadow-primary/5 border-border/50'
-              : 'bg-background/60 backdrop-blur-md border-border/30'
+              ? "py-2 px-4 bg-background/80 backdrop-blur-2xl border-border/50 shadow-lg shadow-primary/5"
+              : "py-4 px-6 bg-background/40 backdrop-blur-xl border-border/30 shadow-none"
           )}
         >
-          <nav className="px-3 sm:px-5">
-            <div className="flex h-12 items-center justify-between">
-              {/* Logo */}
-              <Link href="/" className="flex items-center gap-2 group">
-                {/* <motion.div
-                  whileHover={{ rotate: 180 }}
-                  transition={{ duration: 0.3 }}
-                  className="flex items-center justify-center w-7 h-7 rounded-full bg-primary text-primary-foreground"
+          <div className="flex h-16 items-center justify-between">
+            {/* Logo */}
+            <Link href="/" className="flex items-center gap-3 group">
+              <motion.div
+                whileHover={{ rotate: 10, scale: 1.1 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                className="flex items-center justify-center shrink-0"
+              >
+                <svg
+                  viewBox="0 0 40 42"
+                  fill="none"
+                  className="w-6 h-6 text-primary dark:text-white transition-colors"
                 >
-                  <Terminal className="w-3.5 h-3.5" />
-                </motion.div> */}
-                <span className="font-display text-sm font-bold tracking-tight">
-                  A.E.G.I.S.
-                </span>
-              </Link>
+                  <path
+                    fill="currentColor"
+                    fillRule="evenodd"
+                    d="m7.839 40.783 16.03-28.054L20 6 0 40.783h7.839Zm8.214 0H40L27.99 19.894l-4.02 7.032 3.976 6.914H20.02l-3.967 6.943Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </motion.div>
+              <span className="font-display text-base font-bold tracking-tight text-foreground/90 group-hover:text-foreground transition-colors">
+                A.E.G.I.S
+              </span>
+            </Link>
 
-              {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center gap-0.5">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      'relative px-3 py-1.5 text-sm font-medium transition-colors rounded-full',
-                      pathname === item.href
-                        ? 'text-foreground'
-                        : 'text-muted-foreground hover:text-foreground'
-                    )}
-                  >
-                    {item.label}
-                    {pathname === item.href && (
-                      <motion.div
-                        layoutId="navbar-indicator"
-                        className="absolute inset-0 bg-secondary rounded-full -z-10"
-                        transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-                      />
-                    )}
-                  </Link>
-                ))}
-              </div>
-
-              {/* Right side */}
-              <div className="flex items-center gap-1">
-                <ThemeToggle />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="md:hidden h-8 w-8 rounded-full"
-                  onClick={() => setIsOpen(!isOpen)}
-                  aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-1">
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    'relative px-4 py-2 text-sm font-medium transition-colors rounded-xl overflow-hidden group/item',
+                    pathname === item.href
+                      ? 'text-foreground'
+                      : 'text-muted-foreground hover:text-foreground'
+                  )}
                 >
-                  {isOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-                </Button>
-              </div>
+                  <span className="relative z-10">{item.label}</span>
+                  {pathname === item.href && (
+                    <motion.div
+                      layoutId="nav-highlight"
+                      className="absolute inset-0 bg-primary/10 dark:bg-white/10 rounded-xl"
+                      transition={{ type: 'spring', bounce: 0.15, duration: 0.6 }}
+                    />
+                  )}
+                  <motion.div
+                    className="absolute inset-x-4 bottom-1 h-0.5 bg-primary/40 dark:bg-white/40 scale-x-0 group-hover/item:scale-x-100 transition-transform origin-center z-20"
+                  />
+                </Link>
+              ))}
             </div>
-          </nav>
-        </motion.header>
-      </div>
+
+            {/* Right side */}
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden h-10 w-10 rounded-xl hover:bg-white/10"
+                onClick={() => setIsOpen(!isOpen)}
+                aria-label={isOpen ? 'Close menu' : 'Open menu'}
+              >
+                {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </Button>
+            </div>
+          </div>
+        </motion.div>
+      </nav>
 
       {/* Mobile Navigation */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-x-4 top-20 z-40 md:hidden glass-strong border border-border/50 rounded-2xl overflow-hidden"
+            initial={{ opacity: 0, scale: 0.95, y: -20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -20 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="fixed inset-x-6 top-24 z-40 md:hidden bg-background/80 backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl"
           >
-            <nav className="flex flex-col p-3 gap-1">
+            <nav className="flex flex-col p-4 gap-2">
               {navItems.map((item, index) => (
                 <motion.div
                   key={item.href}
@@ -127,10 +138,10 @@ export function Navigation() {
                   <Link
                     href={item.href}
                     className={cn(
-                      'block px-4 py-2.5 rounded-xl text-sm font-medium transition-colors',
+                      'block px-5 py-3.5 rounded-2xl text-base font-medium transition-all active:scale-[0.98]',
                       pathname === item.href
-                        ? 'bg-secondary text-foreground'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
+                        ? 'bg-primary/10 text-foreground'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-white/5'
                     )}
                   >
                     {item.label}

@@ -63,7 +63,7 @@ export function ContactContent() {
           Get in Touch
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Interested in learning more about A.E.G.I.S. or exploring collaboration opportunities?
+          Interested in learning more about A.E.G.I.S or exploring collaboration opportunities?
           I would love to hear from you. Whether you are a fellow researcher, potential industry partner,
           or simply curious about the project, please do not hesitate to reach out.
         </p>
@@ -90,7 +90,7 @@ export function ContactContent() {
                   Message Sent!
                 </h3>
                 <p className="text-muted-foreground">
-                  Thank you for your interest in A.E.G.I.S. I will get back to you soon.
+                  Thank you for your interest in A.E.G.I.S I will get back to you soon.
                 </p>
                 <Button
                   variant="outline"
@@ -136,7 +136,7 @@ export function ContactContent() {
                 <Textarea
                   id="message"
                   name="message"
-                  placeholder="Tell me about your interest in A.E.G.I.S..."
+                  placeholder="Tell me about your interest in A.E.G.I.S.."
                   rows={5}
                   required
                 />
@@ -203,7 +203,7 @@ export function ContactContent() {
             <h3 className="font-semibold mb-2">Project Inquiries Welcome</h3>
             <p className="text-sm text-muted-foreground">
               I am open to discussing research collaborations, industry partnerships,
-              or academic inquiries about the A.E.G.I.S. project. Whether you represent
+              or academic inquiries about the A.E.G.I.S project. Whether you represent
               a healthcare facility, research institution, or are a fellow student interested
               in similar work, I would be glad to connect.
             </p>

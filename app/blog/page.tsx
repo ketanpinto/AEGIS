@@ -12,9 +12,7 @@ export const metadata: Metadata = {
 export default function BlogPage() {
   return (
     <div className="min-h-screen flex flex-col">
-      <Navigation />
-
-      <main className="flex-1 pt-24 pb-16">
+      <main className="flex-1 pt-40 pb-16">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-12">

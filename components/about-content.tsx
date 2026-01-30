@@ -76,10 +76,10 @@ export function AboutContent() {
         className="mb-16 text-center"
       >
         <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-          About Me & A.E.G.I.S.
+          About Me & A.E.G.I.S
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          A final year Computer Systems Engineering student at Middlesex University Dubai, 
+          A final year Computer Systems Engineering student at Middlesex University Dubai,
           building privacy-preserving technology for elderly care.
         </p>
       </motion.header>
@@ -101,20 +101,20 @@ export function AboutContent() {
               <p className="text-xs text-muted-foreground">Your Photo Here</p>
             </div>
           </div>
-          
+
           {/* Bio */}
           <div className="prose prose-neutral dark:prose-invert max-w-none">
             <p className="text-muted-foreground leading-relaxed">
-              I am a final-year Computer Systems Engineering student at Middlesex University Dubai 
-              with a deep passion for Embedded Systems, Internet of Things (IoT), and Artificial Intelligence. 
-              My academic journey has been driven by a singular vision: bridging the gap between 
+              I am a final-year Computer Systems Engineering student at Middlesex University Dubai
+              with a deep passion for Embedded Systems, Internet of Things (IoT), and Artificial Intelligence.
+              My academic journey has been driven by a singular vision: bridging the gap between
               hardware physics and software intelligence to solve real-world humanitarian problems.
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              A.E.G.I.S. represents the culmination of this vision—a system that leverages the invisible 
-              signals all around us to protect our most vulnerable. By understanding how Wi-Fi waves 
-              interact with the human body, we can create monitoring systems that respect privacy 
-              while saving lives. This project combines my expertise in embedded systems, signal processing, 
+              A.E.G.I.S represents the culmination of this vision—a system that leverages the invisible
+              signals all around us to protect our most vulnerable. By understanding how Wi-Fi waves
+              interact with the human body, we can create monitoring systems that respect privacy
+              while saving lives. This project combines my expertise in embedded systems, signal processing,
               and machine learning to create something truly impactful.
             </p>
           </div>
@@ -133,22 +133,22 @@ export function AboutContent() {
         </h2>
         <div className="prose prose-neutral dark:prose-invert max-w-none">
           <p className="text-muted-foreground leading-relaxed">
-            Elderly falls are a leading cause of fatal injuries worldwide. Traditional monitoring 
-            solutions face critical limitations: <strong>cameras violate privacy</strong> and cannot be 
-            deployed in sensitive areas like bathrooms where many falls occur; <strong>wearable devices</strong> are 
+            Elderly falls are a leading cause of fatal injuries worldwide. Traditional monitoring
+            solutions face critical limitations: <strong>cameras violate privacy</strong> and cannot be
+            deployed in sensitive areas like bathrooms where many falls occur; <strong>wearable devices</strong> are
             often forgotten or deliberately removed by patients with dementia or cognitive impairment.
           </p>
         </div>
 
         <h2 className="font-display text-2xl font-bold tracking-tight mb-4 mt-8">
-          The Solution: A.E.G.I.S.
+          The Solution: A.E.G.I.S
         </h2>
         <div className="prose prose-neutral dark:prose-invert max-w-none">
           <p className="text-muted-foreground leading-relaxed">
-            <strong>A.E.G.I.S.</strong> (Autonomous Elderly Guardian & Intelligent Sensing) is a 
-            &ldquo;device-free&rdquo; monitoring system. It uses commodity Wi-Fi signals (CSI) to detect falls 
-            by analyzing wave distortions in the room, and fuses this with mmWave Radar sensor data 
-            to detect breathing (vital signs) to determine if the person is unconscious after a fall. 
+            <strong>A.E.G.I.S</strong> (Autonomous Elderly Guardian & Intelligent Sensing) is a
+            &ldquo;device-free&rdquo; monitoring system. It uses commodity Wi-Fi signals (CSI) to detect falls
+            by analyzing wave distortions in the room, and fuses this with mmWave Radar sensor data
+            to detect breathing (vital signs) to determine if the person is unconscious after a fall.
             No cameras. No wearables. Just invisible signals protecting lives.
           </p>
         </div>
@@ -216,10 +216,10 @@ export function AboutContent() {
         </h2>
         <div className="prose prose-neutral dark:prose-invert max-w-none">
           <p className="text-muted-foreground leading-relaxed">
-            The intersection of hardware and software has always fascinated me. While software 
-            can create incredible experiences, it is the fusion with physical systems that enables 
-            us to make a tangible impact on the real world. A.E.G.I.S. embodies this philosophy—using 
-            invisible electromagnetic waves, sophisticated signal processing, and machine learning 
+            The intersection of hardware and software has always fascinated me. While software
+            can create incredible experiences, it is the fusion with physical systems that enables
+            us to make a tangible impact on the real world. A.E.G.I.S embodies this philosophy—using
+            invisible electromagnetic waves, sophisticated signal processing, and machine learning
             to create a system that could genuinely save lives while respecting human dignity and privacy.
           </p>
         </div>
