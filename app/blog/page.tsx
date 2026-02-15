@@ -26,7 +26,7 @@ export default function BlogPage() {
           </div>
 
           {/* Blog list with client-side filtering */}
-          {/* <BlogListClient posts={blogPosts} tags={allTags} /> */}
+          <BlogListClient posts={blogPosts} tags={allTags} />
         </div>
       </main>
 

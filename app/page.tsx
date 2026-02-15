@@ -55,12 +55,12 @@ export default function HomePage() {
                         <Badge variant="outline" className="mb-4 font-mono">
                           In Development
                         </Badge>
-                        <h3 className="font-display text-2xl font-bold mb-4">
+                        <h3 className="font-display text-3xl md:text-4xl font-black mb-6 tracking-tight">
                           Autonomous Elderly Guardian & Intelligent Sensing
                         </h3>
                         <TextReveal
                           text="A device-free fall detection system that uses Wi-Fi Channel State Information and mmWave radar to monitor elderly patients without compromising their privacy. No cameras, no wearables - just intelligent signal analysis."
-                          className="text-muted-foreground mb-6 text-sm"
+                          className="text-foreground/70 mb-8 text-lg font-medium leading-relaxed"
                         />
                         <Button asChild>
                           <Link href="/project">
@@ -134,10 +134,10 @@ function FeatureCard({
 }) {
   return (
     <Tilt className="h-full">
-      <GlowWrapper className="h-full p-4 bg-transparent border-none">
-        <Icon className="w-6 h-6 text-primary mb-2" />
-        <h4 className="font-semibold text-sm mb-1">{title}</h4>
-        <p className="text-xs text-muted-foreground">{description}</p>
+      <GlowWrapper className="h-full p-6 bg-card/50 backdrop-blur-sm border-border/50">
+        <Icon className="w-8 h-8 text-primary mb-4" />
+        <h4 className="font-display font-bold text-lg mb-2">{title}</h4>
+        <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
       </GlowWrapper>
     </Tilt>
   )
@@ -147,11 +147,11 @@ function StatCard({ number, label }: { number: string; label: string }) {
   return (
     <Tilt>
       <GlowWrapper>
-        <div className="text-center p-6">
-          <div className="font-display text-4xl sm:text-5xl font-bold text-gradient">
+        <div className="text-center p-8 bg-card/30 backdrop-blur-sm rounded-2xl border border-border/50">
+          <div className="font-display text-5xl sm:text-6xl font-black text-gradient tracking-tighter">
             {number}
           </div>
-          <div className="mt-2 text-sm text-muted-foreground">{label}</div>
+          <div className="mt-3 text-sm font-display font-semibold uppercase tracking-widest text-muted-foreground/80">{label}</div>
         </div>
       </GlowWrapper>
     </Tilt>

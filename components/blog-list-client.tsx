@@ -55,7 +55,7 @@ export function BlogListClient({ posts, tags }: BlogListClientProps) {
         </div>
 
         {/* Tags */}
-        <div className="flex flex-wrap items-center gap-2">
+        {/* <div className="flex flex-wrap items-center gap-2">
           <span className="text-sm text-muted-foreground">Filter by:</span>
           {tags.map((tag) => (
             <Badge
@@ -78,7 +78,7 @@ export function BlogListClient({ posts, tags }: BlogListClientProps) {
               Clear
             </Button>
           )}
-        </div>
+        </div> */}
       </div>
 
       {/* Results count */}
@@ -94,10 +94,10 @@ export function BlogListClient({ posts, tags }: BlogListClientProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="flex flex-col gap-24"
           >
             {filteredPosts.map((post, index) => (
-              <BlogCard key={post.id} post={post} index={index} />
+              <BlogCard key={post.slug} post={post} index={index} />
             ))}
           </motion.div>
         ) : (

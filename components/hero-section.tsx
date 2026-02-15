@@ -67,7 +67,7 @@ export function HeroSection() {
           <div className="flex-1 text-center lg:text-left">
             <motion.div
               variants={itemVariants}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary text-secondary-foreground text-sm font-medium mb-6"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-8 border border-primary/20 backdrop-blur-sm"
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
@@ -76,7 +76,7 @@ export function HeroSection() {
               Final Year Project
             </motion.div>
 
-            <div className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight relative z-10">
+            <div className="font-display text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] relative z-10 mb-6">
               <TextReveal
                 text="A.E.G.I.S"
                 initialDelay={0.4}
@@ -87,12 +87,13 @@ export function HeroSection() {
 
             <motion.p
               variants={itemVariants}
-              className="mt-6 text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed"
+              className="mt-6 text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 leading-relaxed font-medium"
             >
-              A.E.G.I.S - Autonomous Elderly Guardian & Intelligent Sensing.
+              Autonomous Elderly Guardian & Intelligent Sensing.
               <br />
-              A device-free fall detection system using Wi-Fi CSI and mmWave sensor fusion
-              for privacy-preserving vital monitoring.
+              <span className="text-foreground/80 mt-2 block">
+                A device-free fall detection system using Wi-Fi CSI and mmWave sensor fusion for privacy-preserving monitoring.
+              </span>
             </motion.p>
 
             <motion.div

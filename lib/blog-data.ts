@@ -8,6 +8,8 @@ export interface BlogPost {
   tags: string[]
   featured?: boolean
   category: 'weekly-update' | 'supervisor-meeting' | 'technical' | 'research'
+  imageUrl?: string
+  videoUrl?: string
 }
 
 export interface Project {
@@ -25,61 +27,88 @@ export interface Project {
 export const blogPosts: BlogPost[] = [
   {
     slug: 'week-1-project-inception-hardware-selection',
-    title: 'Week 1: Project Inception & Hardware Selection',
+    title: 'Week 1: THE BEGINNING',
     excerpt: 'The beginning of A.E.G.I.S - choosing Wi-Fi CSI over cameras for privacy-preserving fall detection.',
     content: `
-## Objectives for the Week
 
-This week marked the official start of my final year project. The primary objectives were:
+This week marked the beginning of our final-year project journey with an introductory session led by **Dr. Fehmida** and **Mr. Roshan**. They gave us an in-depth overview of the module, including timelines, expectations, and deliverables for the following months. A key part of the lecture was a discussion of several research methodologies, with an emphasis on how each methodology can be used in our projects.
 
-- Define the core problem statement and project scope
-- Research existing fall detection solutions and their limitations
-- Select the primary sensing technology for the system
-- Begin hardware procurement planning
 
-## Technical Challenges Faced
+![Safe Smart Home Interior](https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&q=80&w=1200)
 
-The biggest challenge was deciding on the sensing technology. Traditional approaches use:
 
-1. **Camera-based systems** - Highly accurate but raise serious privacy concerns. Cannot be deployed in bathrooms where many falls occur.
-2. **Wearable devices** - Require user compliance. Elderly patients with dementia often forget to wear them or remove them.
-3. **Pressure mats** - Limited coverage area and can be tripped over.
 
-I needed a solution that was:
-- Device-free (no wearables required)
-- Privacy-preserving (no cameras)
-- Capable of whole-room coverage
-- Able to detect both falls and vital signs
+The **Build**, **Model**, and **Experimental** methodologies stood out to me as the most applicable to my project:
 
-## Solutions Implemented
+- **Build methodology** focuses on the design and development of my device's sensor nodes and processing unit.
+- **Model methodology** Securing the development of algorithms for classifying fall patterns and distinguishing them from daily activities.
+- **Experimental methodology** will be required for testing the device with simulated scenarios and determining its detection accuracy.
 
-After extensive research, I chose **Wi-Fi Channel State Information (CSI)** as the primary sensing modality. Here's why:
+**Mr. Roshan** also introduced us to the **First-Cut Proposal** form, which allows us to define our project's goal, objectives, and scope. He discussed how this document will help us refine our project ideas and successfully communicate them to our supervisors. Following the workshop, we were instructed to contact our supervisors for an introductory meeting to discuss our plans and ideas. We were also given the task of completing the First-Cut Proposal form and starting with our blogging website.
 
-\`\`\`
-Wi-Fi CSI Advantages:
-├── Privacy: Only analyzes signal distortions, not images
-├── Coverage: Works through walls and covers entire rooms
-├── Cost: Uses existing commodity hardware (ESP32)
-├── Device-free: No wearables needed
-└── 24/7 Monitoring: Works in darkness and all conditions
-\`\`\`
 
-The ESP32-WROOM-32U was selected because it supports CSI extraction through modified firmware and is cost-effective for deployment.
 
-To complement fall detection, I'm adding an **LD2410 mmWave radar** for vital sign monitoring. This will detect breathing patterns to determine if a person is unconscious after a fall.
 
-## Next Steps
+---
 
-- Order ESP32-WROOM-32U modules and LD2410 radar sensors
-- Set up Raspberry Pi 5 as the central processing hub
-- Begin studying CSI extraction techniques and existing research papers
-- Create initial system architecture diagrams
+
+### **The Idea**
+
+For my final-year project, I decided to work on **A.E.G.I.S. (Autonomous Elderly Guardian & Intelligent Sensing)**. The project aims to create a privacy-preserving fall detection system that utilizes Wi-Fi signals and radar technology to monitor safety.
+
+
+![Advanced Sensing Technology](https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1200)
+
+> This device, when placed in a room, will analyse the disturbance in radio waves to detect falls without using intrusive cameras or wearable devices. It will also check for vital signs (like breathing) to determine if a person is conscious after a fall and provide real-time alerts to caregivers to assist them immediately.
+
+---
+
+## The Inspiration Behind A.E.G.I.S.
+
+
+The inspiration for this project is deeply personal. 
+
+> "My grandmother suffered a severe stroke in 2005 which left the entire right side of her body paralysed. The cause of this severity was a fall; she was lying at home alone for three days before someone found her after spotting her through a window. Because she was stranded there for three days, her condition became much worse, leaving her with no control over her right hand side. Even now, she frequently falls, sometimes at night when the caretakers are asleep, which wastes critical response time. That’s what inspired me to develop A.E.G.I.S. I aim to solve this problem once and for all, ensuring no one else has to wait days for help."
+
+The project will include hardware and software integration. **Wi-Fi CSI (Channel State Information)** sensors will be used to track room presence and detect sudden falls, while **mmWave radar** will provide data on micro-movements like breathing. This data will be transmitted to a central processor, which will analyse it in real-time and provide immediate alerts if a critical event occurs. The plan is to build and prototype the sensor nodes, develop the detection algorithm, and test the system with simulated falls to ensure reliability and speed.
+
+---
+## My Approach
+
+1. **Phase 1:** Research and design the hardware nodes and select appropriate Wi-Fi and radar sensors.
+2. **Phase 2:** Develop the detection algorithm to interpret signal variances.
+3. **Phase 3:** Develop the model to distinguish between falls, sitting, and walking.
+4. **Phase 4:** Integrate the hardware sensors with the notification system.
+5. **Phase 5:** Conduct experimental trials to test the device and gather data for accuracy improvements.
+
+
+![Research and Laboratory Work](https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1200)
+---
+## Methodology
+
+After evaluating different approaches, I found that the Build, Model, and Experimental methodologies were the best fit for **A.E.G.I.S.**:
+
+- **Build:** Focuses on designing and developing the hardware sensor nodes and software logic.
+- **Model:** Applies to creating algorithms that classify movement patterns and identify falls.
+- **Experimental:** Involves testing the system in a controlled environment to evaluate response time and accuracy.
+
+
+---
+## Reflection
+
+
+After spending a lot of time brainstorming and discussing with my supervisor, I finally settled on a project idea this week. Initially, I had various ideas, but after reflecting on my grandmother's experience and doing careful research, I chose **A.E.G.I.S.** because of its potential to make a significant difference in elderly care. 
+
+Moving ahead, I intend to focus on the hardware prototype and finalise the sensor selection.
+
+This is just the beginning, and I’m excited to see how **A.E.G.I.S.** can transform the way we protect our loved ones!
     `,
     date: '2025-01-20',
     readingTime: '5 min read',
     tags: ['Hardware', 'Wi-Fi CSI', 'Privacy', 'Research'],
     featured: true,
     category: 'weekly-update',
+    imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1200',
   },
   {
     slug: 'week-2-esp32-csi-extraction-setup',
@@ -134,6 +163,7 @@ The CSI data contains 52 subcarriers, each with amplitude and phase information 
     tags: ['ESP32', 'CSI', 'Firmware', 'C++'],
     featured: false,
     category: 'weekly-update',
+    imageUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1200',
   },
   {
     slug: 'supervisor-meeting-1-project-scope',
@@ -185,6 +215,7 @@ The CSI data contains 52 subcarriers, each with amplitude and phase information 
     tags: ['Meeting', 'Planning', 'Feedback'],
     featured: false,
     category: 'supervisor-meeting',
+    imageUrl: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=1200',
   },
   {
     slug: 'technical-deep-dive-wifi-csi',
@@ -262,6 +293,7 @@ In the next technical post, I'll cover the signal processing pipeline for extrac
     tags: ['Wi-Fi CSI', 'Theory', 'Signal Processing', 'Research'],
     featured: true,
     category: 'technical',
+    imageUrl: 'https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&q=80&w=1200',
   },
   {
     slug: 'week-3-raspberry-pi-setup-data-pipeline',
@@ -320,6 +352,7 @@ class CSIProcessor:
     tags: ['Raspberry Pi', 'Python', 'Data Pipeline'],
     featured: false,
     category: 'weekly-update',
+    imageUrl: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&q=80&w=1200',
   },
   {
     slug: 'supervisor-meeting-2-progress-review',
@@ -368,6 +401,7 @@ class CSIProcessor:
     tags: ['Meeting', 'Progress', 'ML Strategy'],
     featured: false,
     category: 'supervisor-meeting',
+    imageUrl: 'https://images.unsplash.com/photo-1522071823991-b99c5517a7EB?auto=format&fit=crop&q=80&w=1200',
   },
 ]
 

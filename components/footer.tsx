@@ -2,10 +2,17 @@
 
 import * as React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Terminal, Github, Linkedin, Mail, ArrowUpRight } from 'lucide-react'
 
-const footerLinks = [
+interface FooterLink {
+  label: string
+  href: string
+  external?: boolean
+}
+
+const footerLinks: { title: string; links: FooterLink[] }[] = [
   {
     title: 'Navigation',
     links: [
@@ -43,9 +50,13 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary text-primary-foreground">
-                <Terminal className="w-4 h-4" />
-              </div>
+              <Image
+                src="/icon.svg"
+                alt="A.E.G.I.S Logo"
+                width={32}
+                height={32}
+                className="w-8 h-8 dark:invert"
+              />
               <span className="font-display text-lg font-bold tracking-tight">
                 A.E.G.I.S
               </span>
@@ -55,7 +66,7 @@ export function Footer() {
             </p>
             <div className="flex items-center gap-3">
               <a
-                href="https://github.com"
+                href="https://github.com/ketanpinto"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors"
@@ -64,7 +75,7 @@ export function Footer() {
                 <Github className="w-5 h-5" />
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://linkedin.com/in/ketanpinto/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors"
@@ -73,7 +84,7 @@ export function Footer() {
                 <Linkedin className="w-5 h-5" />
               </a>
               <a
-                href="mailto:hello@techlog.dev"
+                href="mailto:ketanpinto16@gmail.com"
                 className="text-muted-foreground hover:text-foreground transition-colors"
                 aria-label="Email"
               >
@@ -117,7 +128,7 @@ export function Footer() {
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            {new Date().getFullYear()} A.E.G.I.S Middlesex University Dubai - Final Year Project.
+            {new Date().getFullYear()} A.E.G.I.S | Ketan Pinto - Final Year Project.
           </p>
           <p className="text-sm text-muted-foreground">
             Built with{' '}
