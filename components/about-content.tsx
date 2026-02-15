@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Cpu, Radio, Brain, Shield, Heart, Wifi } from 'lucide-react'
 
@@ -93,19 +94,20 @@ export function AboutContent() {
       >
         <div className="flex flex-col md:flex-row gap-8 items-center">
           {/* Photo placeholder */}
-          <div className="w-48 h-48 rounded-2xl bg-card border border-border flex items-center justify-center shrink-0">
-            <div className="text-center p-4">
-              <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-primary/10 flex items-center justify-center">
-                <span className="text-2xl font-bold text-primary">YN</span>
-              </div>
-              <p className="text-xs text-muted-foreground">Your Photo Here</p>
-            </div>
+          {/* Photo */}
+          <div className="w-80 h-80 rounded-2xl bg-card border border-border flex items-center justify-center shrink-0 overflow-hidden relative">
+            <Image
+              src="/meehe.jpg"
+              alt="Profile Photo"
+              fill
+              className="object-cover"
+            />
           </div>
 
           {/* Bio */}
           <div className="prose prose-neutral dark:prose-invert max-w-none">
             <p className="text-muted-foreground leading-relaxed">
-              I am a final-year Computer Systems Engineering student at Middlesex University Dubai
+              Hey! I'm Ketan Pinto, a final-year Computer Systems Engineering student at Middlesex University Dubai
               with a deep passion for Embedded Systems, Internet of Things (IoT), and Artificial Intelligence.
               My academic journey has been driven by a singular vision: bridging the gap between
               hardware physics and software intelligence to solve real-world humanitarian problems.
