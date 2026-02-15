@@ -3,6 +3,7 @@
 import React from "react"
 import Link from 'next/link'
 import { HeroSection } from '@/components/hero-section'
+import { CinematicVideo } from '@/components/cinematic-video'
 import { BlogCard } from '@/components/blog-card'
 import { SectionHeader } from '@/components/section-header'
 import { Footer } from '@/components/footer'
@@ -27,6 +28,8 @@ export default function HomePage() {
 
         <ParallaxText baseVelocity={-2}>AUTONOMOUS GUARDIAN</ParallaxText>
 
+        <CinematicVideo />
+        
         <Reveal width="100%" delay={0.1}>
           <ProjectContent />
         </Reveal>
