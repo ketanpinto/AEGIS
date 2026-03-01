@@ -22,7 +22,7 @@ interface TOCItem {
 }
 
 // Cinematic section component for scroll reveals
-function AnimatedSection({ children }: { children: React.ReactNode }) {
+function AnimatedSection({ children, className }: { children: React.ReactNode, className?: string }) {
   const ref = React.useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
@@ -32,17 +32,33 @@ function AnimatedSection({ children }: { children: React.ReactNode }) {
       initial={{ opacity: 0, y: 30 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className="mb-24 lg:mb-40"
+      className={className || "mb-24 lg:mb-40"}
     >
       {children}
     </motion.section>
   )
 }
 
+const categoryColors = {
+  'weekly-update': 'text-primary bg-primary/10 border-primary/20',
+  'supervisor-meeting': 'text-blue-400 bg-blue-400/10 border-blue-400/20',
+  'technical': 'text-amber-400 bg-amber-400/10 border-amber-400/20',
+  'research': 'text-indigo-400 bg-indigo-400/10 border-indigo-400/20',
+}
+
+const categoryGlows = {
+  'weekly-update': 'shadow-primary/20',
+  'supervisor-meeting': 'shadow-blue-500/20',
+  'technical': 'shadow-amber-500/20',
+  'research': 'shadow-indigo-500/20',
+}
+
 export function BlogPostContent({ post }: BlogPostContentProps) {
   const [toc, setToc] = React.useState<TOCItem[]>([])
   const [activeId, setActiveId] = React.useState<string>('')
   const contentRef = React.useRef<HTMLDivElement>(null)
+  const categoryClass = categoryColors[post.category] || categoryColors['weekly-update']
+  const accentColor = categoryClass.split(' ')[0] // e.g., 'text-primary'
 
   const { scrollYProgress } = useScroll()
   const scaleX = useSpring(scrollYProgress, {
@@ -95,13 +111,13 @@ export function BlogPostContent({ post }: BlogPostContentProps) {
   return (
     <>
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1.5 bg-primary origin-left z-[60] glow-primary"
-        style={{ scaleX }}
+        className={`fixed top-0 left-0 right-0 h-1.5 z-[60] bg-current ${accentColor} brightness-125`}
+        style={{ scaleX, boxShadow: `0 0 20px currentColor` }}
       />
 
       <div className="relative min-h-screen bg-background selection:bg-primary/20">
         {/* Background Decorative Elements */}
-        <div className="absolute top-0 right-0 w-1/3 h-[1000px] bg-primary/5 blur-[120px] rounded-full pointer-events-none -z-10" />
+        <div className={`absolute top-0 right-0 w-1/3 h-[1000px] blur-[120px] rounded-full pointer-events-none -z-10 bg-current/5 ${accentColor}`} />
         <div className="absolute top-[40%] left-0 w-1/4 h-[800px] bg-accent/5 blur-[100px] rounded-full pointer-events-none -z-10" />
 
         <article className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-40">
@@ -139,7 +155,7 @@ export function BlogPostContent({ post }: BlogPostContentProps) {
                   </div>
                   <div className="space-y-1">
                     <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 font-medium">Category</p>
-                    <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 text-[10px] uppercase tracking-wider">
+                    <Badge variant="secondary" className={`${categoryClass} text-[10px] uppercase tracking-wider`}>
                       {post.category.replace('-', ' ')}
                     </Badge>
                   </div>
@@ -154,7 +170,7 @@ export function BlogPostContent({ post }: BlogPostContentProps) {
                           key={item.id}
                           href={`#${item.id}`}
                           className={`block text-xs transition-all duration-300 ${activeId === item.id
-                            ? 'text-primary translate-x-1 font-medium'
+                            ? `${accentColor} translate-x-1 font-medium`
                             : 'text-muted-foreground hover:text-foreground'
                             }`}
                           onClick={(e) => {
@@ -180,19 +196,19 @@ export function BlogPostContent({ post }: BlogPostContentProps) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className="mb-24 lg:mb-32"
+                className="mb-20 lg:mb-28"
               >
                 <div className="inline-flex flex-wrap gap-2 mb-8">
                   {post.tags.map((tag) => (
-                    <span key={tag} className="text-[10px] sm:text-xs uppercase tracking-[0.15em] text-primary font-semibold">
+                    <span key={tag} className={`text-[10px] sm:text-xs uppercase tracking-[0.15em] font-semibold ${accentColor}`}>
                       #{tag}
                     </span>
                   ))}
                 </div>
-                <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.1] mb-6">
+                <h1 className="font-display text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight text-foreground leading-[1.05] mb-8">
                   {post.title}
                 </h1>
-                <p className="text-xl sm:text-2xl text-muted-foreground/80 font-light leading-relaxed italic">
+                <p className="text-xl sm:text-2xl text-muted-foreground/80 font-light leading-relaxed italic border-l-2 border-border/40 pl-6 py-2">
                   {post.excerpt}
                 </p>
               </motion.header>
@@ -202,27 +218,27 @@ export function BlogPostContent({ post }: BlogPostContentProps) {
                 ref={contentRef}
                 className="prose prose-neutral dark:prose-invert max-w-none 
                   prose-headings:font-display prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-foreground
-                  prose-p:text-lg sm:text-xl prose-p:leading-[1.8] prose-p:text-muted-foreground/90 prose-p:font-light prose-p:mb-6
+                  prose-p:text-lg sm:text-xl prose-p:leading-[1.8] prose-p:text-muted-foreground/90 prose-p:font-light prose-p:mb-8
                   prose-strong:text-foreground prose-strong:font-semibold
                   prose-a:text-primary prose-a:underline-offset-4 hover:prose-a:underline
                   prose-blockquote:border-none prose-blockquote:relative prose-blockquote:my-12
                   prose-img:rounded-[2rem] prose-img:shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:prose-img:shadow-[0_20px_50px_rgba(0,0,0,0.4)]
                   prose-img:my-12 prose-img:mx-auto
                   prose-li:text-lg sm:text-xl prose-li:text-muted-foreground/80 prose-li:leading-relaxed
-                  prose-ul:space-y-2 prose-ol:space-y-2
+                  prose-ul:space-y-3 prose-ol:space-y-3 prose-ul:mb-8 prose-ol:mb-8
                   prose-hr:border-none prose-hr:h-px prose-hr:bg-gradient-to-r prose-hr:from-transparent prose-hr:via-border prose-hr:to-transparent prose-hr:my-16"
               >
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
                   components={{
                     h2: ({ node, ...props }) => (
-                      <AnimatedSection>
-                        <h2 {...props} className="text-3xl sm:text-4xl lg:text-5xl mb-6 mt-16 leading-tight" />
+                      <AnimatedSection className="mb-8 mt-24">
+                        <h2 {...props} className="text-3xl sm:text-4xl lg:text-5xl mb-6 mt-0 leading-tight" />
                       </AnimatedSection>
                     ),
                     h3: ({ node, ...props }) => (
-                      <AnimatedSection>
-                        <h3 {...props} className="text-2xl sm:text-3xl lg:text-4xl mb-4 mt-12 leading-tight text-foreground/90" />
+                      <AnimatedSection className="mb-6 mt-16">
+                        <h3 {...props} className="text-2xl sm:text-3xl lg:text-4xl mb-4 mt-0 leading-tight text-foreground/90" />
                       </AnimatedSection>
                     ),
                     p: ({ node, ...props }) => {
@@ -231,34 +247,34 @@ export function BlogPostContent({ post }: BlogPostContentProps) {
                         (child) => React.isValidElement(child) && child.type === 'img'
                       )
                       if (isImage) {
-                        return <div className="my-12 lg:my-16">{props.children}</div>
+                        return <div className="my-16 lg:my-24">{props.children}</div>
                       }
-                      return <p {...props} />
+                      return <p {...props} className="mb-8" />
                     },
                     blockquote: ({ node, ...props }) => (
-                      <AnimatedSection>
-                        <div className="relative isolate px-6 sm:px-8 py-10 bg-muted/30 rounded-[1.5rem] border border-border/50 overflow-hidden">
-                          <Quote className="absolute top-6 left-6 w-8 h-8 text-primary/10 -z-10 rotate-12" />
+                      <AnimatedSection className="my-16">
+                        <div className="relative isolate px-6 sm:px-10 py-12 bg-muted/30 rounded-[2rem] border border-border/50 overflow-hidden">
+                          <Quote className="absolute top-8 left-8 w-12 h-12 text-primary/10 -z-10 rotate-12" />
                           <blockquote {...props} className="text-xl sm:text-2xl font-light italic text-foreground leading-relaxed m-0" />
                         </div>
                       </AnimatedSection>
                     ),
                     hr: () => (
-                      <div className="flex items-center justify-center gap-4 my-16">
+                      <div className="flex items-center justify-center gap-4 my-24">
                         <div className="h-px w-full bg-gradient-to-r from-transparent via-border to-transparent" />
-                        <div className="w-2 h-2 rounded-full bg-primary/40 shrink-0" />
+                        <div className={`w-2 h-2 rounded-full bg-current opacity-40 shrink-0 ${accentColor}`} />
                         <div className="h-px w-full bg-gradient-to-r from-transparent via-border to-transparent" />
                       </div>
                     ),
                     img: ({ node, ...props }) => (
-                      <div className="flex flex-col items-center gap-6">
+                      <div className="flex flex-col items-center gap-8">
                         <img
                           {...props}
-                          className="rounded-[2rem] lg:rounded-[3rem] shadow-2xl transition-transform duration-700 hover:scale-[1.02]"
+                          className={`rounded-[2rem] lg:rounded-[3rem] shadow-2xl transition-all duration-700 hover:scale-[1.015] hover:shadow-primary/5 ${categoryGlows[post.category] || categoryGlows['weekly-update']}`}
                           alt={props.alt || ''}
                         />
                         {props.alt && (
-                          <span className="text-sm font-light tracking-wide text-muted-foreground italic opacity-70">
+                          <span className="text-sm font-light tracking-wide text-muted-foreground italic opacity-70 mb-4">
                             — {props.alt}
                           </span>
                         )}
