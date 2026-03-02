@@ -10,8 +10,11 @@ export const metadata: Metadata = {
 }
 
 export default function BlogPage() {
+  const filteredBlogPosts = blogPosts.filter(post => post.category !== 'supervisor-meeting')
+
   return (
     <div className="min-h-screen flex flex-col">
+      <Navigation />
       <main className="flex-1 pt-40 pb-16">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           {/* Header */}
@@ -26,7 +29,7 @@ export default function BlogPage() {
           </div>
 
           {/* Blog list with client-side filtering */}
-          <BlogListClient posts={blogPosts} tags={allTags} />
+          <BlogListClient posts={filteredBlogPosts} tags={allTags} />
         </div>
       </main>
 
