@@ -375,63 +375,56 @@ In the next technical post, I'll cover the signal processing pipeline for extrac
     imageUrl: 'https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&q=80&w=1200',
   },
   {
-    slug: 'week-3-raspberry-pi-setup-data-pipeline',
-    title: 'Week 3: Raspberry Pi Setup & Data Pipeline',
-    excerpt: 'Configuring the Raspberry Pi 5 as the central processing brain and establishing data flow.',
+    slug: 'week-3-literature-review-research-gap',
+    title: 'Week 3: Literature Review, Research Gap, Research Questions, and Reflections',
+    excerpt: 'A comprehensive review of existing ambient assisted living technologies, identifying research gaps, and defining the core research questions for A.E.G.I.S.',
     content: `
-## Objectives for the Week
+## Literature Review
 
-- Set up Raspberry Pi 5 with necessary dependencies
-- Establish serial communication with ESP32
-- Create data logging and storage system
-- Begin implementing basic signal processing
+This week, I focused on understanding the existing research and frameworks related to ambient assisted living, elderly fall detection, and radio frequency (RF) sensing. Traditional fall detection in elderly care is typically guided by two established paradigms: wearable technologies (such as accelerometers or smartwatches) and vision-based systems (such as RGB cameras or infrared sensors).
 
-## Technical Challenges Faced
+Many existing studies evaluate these traditional systems and highlight severe limitations. Wearable devices suffer from poor user compliance, especially among individuals with cognitive impairments like dementia, who frequently forget to wear them or actively remove them. Conversely, vision-based systems offer passive monitoring but severely compromise user dignity, making them entirely unsuitable for deployment in private areas like bathrooms, where falls most frequently occur.
 
-The main challenge was handling the high-frequency CSI data stream. The ESP32 sends CSI packets at approximately 100Hz, which needs efficient handling on the Pi.
+In recent years, machine learning has been widely applied to RF sensing, specifically utilizing Wi-Fi Channel State Information (CSI) and Frequency Modulated Continuous Wave (FMCW) radar. Wi-Fi CSI can track the variance in radio waves to identify human movement, while mmWave radar excels at micro-movement detection, such as respiration. However, its application in commercial healthcare appears fragmented. Most research focuses either purely on Wi-Fi CSI, which struggles with environmental noise and false positives, or purely on radar, which often has a limited field of view.
 
-## Solutions Implemented
+From reviewing this literature, it became clear that while RF sensing standards exist and machine learning models are available, there is limited work that successfully fuses Wi-Fi macro-movement data with radar-based vital sign monitoring into a single, cohesive edge-computing platform.
 
-Created a multi-threaded Python application:
+## Research Gap
 
-\`\`\`python
-import threading
-import serial
-import numpy as np
-from collections import deque
+Based on the literature reviewed, the following research gaps were identified:
 
-class CSIProcessor:
-    def __init__(self, port='/dev/ttyUSB0', baud=921600):
-        self.serial = serial.Serial(port, baud)
-        self.buffer = deque(maxlen=1000)
-        self.running = True
-        
-    def reader_thread(self):
-        while self.running:
-            if self.serial.in_waiting:
-                data = self.serial.readline()
-                self.buffer.append(self.parse_csi(data))
-                
-    def processor_thread(self):
-        while self.running:
-            if len(self.buffer) >= 100:
-                window = list(self.buffer)[-100:]
-                features = self.extract_features(window)
-                # Feed to ML model
-\`\`\`
+- Fall detection evaluation is often isolated to a single sensor type, leading to high false-positive rates when environmental noise is introduced.
+- Existing Wi-Fi CSI systems primarily focus on the fall event itself but do not verify the patient's post-fall status (e.g., conscious and breathing versus unconscious).
+- There is limited integration of multi-modal RF sensing with localized edge-computing; many systems offload processing to the cloud, introducing unacceptable latency and data privacy risks.
+- Few systems provide an autonomous decision-support tool that combines the spatial coverage of Wi-Fi with the localized, high-fidelity vital monitoring of mmWave radar.
 
-## Next Steps
+This project aims to address these gaps by developing a hybrid system that integrates Wi-Fi CSI disturbance tracking with mmWave respiratory monitoring to generate highly accurate, privacy-preserving alerts processed entirely on a local edge device.
 
-- Implement feature extraction algorithms
-- Begin collecting labeled training data
-- Set up mmWave radar integration
+## Research Questions
+
+To guide the development and evaluation of the project, the following research questions have been formulated:
+
+1. How can the variance in Wi-Fi CSI subcarriers and mmWave radar telemetry be effectively fused to differentiate a critical fall from standard daily activities?
+2. Can supervised machine learning models (such as Support Vector Machines) deployed on a Raspberry Pi 5 achieve real-time, low-latency fall classification without cloud dependency?
+3. How reliably can the LD2410C mmWave sensor detect human respiration to verify post-fall consciousness in a highly obstructed simulated environment?
+4. Does the fusion of CSI and radar data significantly reduce the false-positive alert rate compared to single-sensor ambient monitoring systems?
+
+These questions will shape both the technical implementation of the machine learning pipeline and the evaluation of the sensor nodes in the coming weeks.
+
+## Reflection
+
+Working on the literature review helped me understand that elderly monitoring is not just a technical problem, but also a deeply human and ethical issue. It reinforced the importance of designing the A.E.G.I.S. system in a way that prioritizes dignity, proving that the best technical solution is ineffective if users reject it due to privacy concerns.
+
+Identifying the research gap was particularly important, as it clarified what differentiates this project from existing IoT studies. The integration of post-fall vital sign verification (via radar) with general spatial awareness (via Wi-Fi) appears to be the most innovative aspect of the system.
+
+This week has strengthened the research foundation of the project and ensured that the upcoming data collection and algorithm development phases are grounded in existing academic knowledge while contributing a novel approach to sensor fusion. It has also made me significantly more confident about the academic rigor and real-world impact of the project.
     `,
-    date: '2025-02-03',
-    readingTime: '4 min read',
-    tags: ['Raspberry Pi', 'Python', 'Data Pipeline'],
+    date: '2026-02-16',
+    readingTime: '5 min read',
+    tags: ['Literature Review', 'Research Gap', 'Sensor Fusion', 'Methodology'],
     featured: false,
     category: 'weekly-update',
-    imageUrl: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&q=80&w=1200',
+    imageUrl: 'https://images.unsplash.com/photo-1456406644174-8ddd4cd52a06?auto=format&fit=crop&q=80&w=1200',
   },
   {
     slug: 'supervisor-meeting-2-progress-review',
