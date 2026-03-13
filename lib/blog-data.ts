@@ -475,6 +475,132 @@ This week has strengthened the research foundation of the project and ensured th
     category: 'supervisor-meeting',
     imageUrl: 'https://images.unsplash.com/photo-1522071823991-b99c5517a7EB?auto=format&fit=crop&q=80&w=1200',
   },
+  {
+    slug: 'week-4-wbs-and-gantt-chart',
+    title: 'Week 4: WBS and Gantt Chart',
+    excerpt: 'Planning the architecture with a Work Breakdown Structure and Gantt chart before diving into development.',
+    content: `
+Before diving headfirst into wiring up microcontrollers and writing Python scripts, this week was all about hitting the brakes and actually planning the architecture. A sensor-fusion project like A.E.G.I.S. has a lot of moving parts, so I needed a solid roadmap to ensure I wouldn't get lost in the weeds later on.
+
+## Work Breakdown Structure (WBS)
+
+To stop the project from feeling like one massive, impossible mountain, I built a Work Breakdown Structure (WBS). The idea here was to chop the entire A.E.G.I.S. system into bite-sized, logical modules.
+
+I separated the workload into highly specific phases: initial Radio Frequency (RF) research, hardware procurement, embedded C development (for the ESP32 Wi-Fi tripwire), Python backend processing (the Wave-Shift math engine), and finally, the sensor fusion logic tying in the LD2410C radar. Mapping it out like this was a game-changer. It clearly highlighted the true scope of the project and gave me a tangible checklist to work through, rather than just blindly coding and hoping it all connects at the end.
+
+![Work Breakdown Structure](/wbs-image-placeholder.jpg)
+
+## Gantt Chart
+
+With the WBS outlining what needed to be done, I used a Gantt chart to map out when it would happen. Hardware and software projects are heavily dependent on sequence. For instance, I physically cannot calibrate the Python kinetic variance thresholds until the ESP32 network is successfully generating an autonomous Wi-Fi stream.
+
+Plotting the tasks on a visual timeline helped me lock in strict dependencies and allocate specific weeks for coding, debugging, and physical testing. I used a timeline tool to visually stack the tasks leading up to the final submission in April. It gives me a clear sequence of deadlines and, most importantly, ensures I have enough buffer time for the inevitable troubleshooting that comes with custom hardware integration.
+
+![Gantt Chart](/gantt-image-placeholder.jpg)
+    `,
+    date: '2026-02-23',
+    readingTime: '3 min read',
+    tags: ['Planning', 'WBS', 'Gantt Chart', 'Project Management'],
+    featured: false,
+    category: 'weekly-update',
+    imageUrl: '/wbs-image-placeholder.jpg',
+  },
+  {
+    slug: 'week-5-prototyping-aegis-system',
+    title: 'Week 5: Prototyping the A.E.G.I.S. System',
+    excerpt: 'Transitioning from theoretical planning to building the first working prototype of A.E.G.I.S.',
+    content: `
+This week, I moved from theoretical planning to building the first working prototype of A.E.G.I.S. Because a system is useless if it only works on paper, I needed to physically integrate the microcontrollers and the Python backend to process live environmental disturbances. The objective was to create a scaled prototype that detects sudden human falls and triggers a local alert, all whilst strictly preserving user privacy.
+
+## Mathematical Engine Preparation
+
+Before testing the physical hardware, I had to ensure the data extraction was mathematically sound. Because preserving dignity is the primary motive behind A.E.G.I.S., optical cameras cannot be used. Therefore, I wrote a Python script to parse raw Channel State Information (CSI) from the Wi-Fi network.
+
+Instead of relying on basic signal strength, which fluctuates wildly and causes false alarms, I developed a Wave-Shift algorithm. This calculates the kinetic variance (standard deviation) across a rolling 10-frame buffer. The logic is simple: if the room is still, the variance remains low; if a person falls, the physical drop violently distorts the Wi-Fi waves, causing a massive variance spike. This lightweight mathematical approach is necessary because it allows the system to run locally on the Raspberry Pi 5, entirely removing the need for external cloud computing.
+
+## Hardware and Edge Deployment
+
+With the math engine established, I moved to the physical hardware setup. I configured two ESP32 microcontrollers, a Beacon and a Receiver, to generate an invisible Wi-Fi tripwire. However, Wi-Fi CSI alone has a flaw: it detects a sudden drop, but if the person lies perfectly still unconscious, the variance returns to normal. The system wouldn't know if a person fell or if a heavy book simply dropped off a table.
+
+To solve this, I integrated an HLK-LD2410C mmWave radar to track micro-movements. The cause-and-effect logic is now absolute: if the Wi-Fi detects a massive variance spike and the radar subsequently detects human respiration at floor level with no walking movement, the system definitively confirms a fall.
+
+For the alert output, a simple buzzer provides no detailed context. Consequently, I wired an ILI9341 SPI TFT display directly to the Pi’s GPIO pins. When the dual-sensor threshold is breached, the display dynamically flashes a red alert state.
+
+## Reflections and Challenges
+
+Integrating the math with the physical hardware immediately revealed several real-world flaws. Firstly, if the Python script takes too long to process the complex matrices, the Raspberry Pi's USB serial buffer jams. This caused a massive 15-second latency between a physical movement and the screen updating. Because a 15-second delay is disastrous in a medical emergency, I coded a low-latency failsafe to constantly monitor and flush the queue, forcing the processing back to real-time.
+
+Secondly, I encountered the "Quiet Room" problem. If the system relies on a smartphone to generate network traffic, modern operating systems will eventually drop the closed-loop Wi-Fi connection to save battery. If the phone disconnects, the wave transmission ceases, and the entire safety net fails. To fix this, I programmed the ESP32s using C and FreeRTOS to autonomously fire a UDP ping ten times a second, ensuring the system is completely self-sustaining.
+    `,
+    date: '2026-03-02',
+    readingTime: '3 min read',
+    tags: ['Prototyping', 'Hardware', 'Python', 'ESP32', 'Raspberry Pi 5'],
+    featured: false,
+    category: 'weekly-update',
+    imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1200',
+  },
+  {
+    slug: 'week-6-prototype-evaluation-architecture',
+    title: 'Week 6: Prototype Evaluation & Formalising System Architecture',
+    excerpt: 'Evaluating the A.E.G.I.S. prototype through real-world logic tests and formalising the UML documentation.',
+    content: `
+Week 6 was the critical turning point for A.E.G.I.S. While Week 5 was simply about getting the hardware pieces to communicate, this week was about forcing the prototype through real-world logic tests. If the mathematical engine is flawed in a controlled test, it will fail disastrously in a real medical emergency. Therefore, my priority was to evaluate the prototype, break it, and fix the underlying logic before formalising the UML documentation.
+
+## Prototype Evaluation & Refinement
+
+During my initial testing of the Raspberry Pi processing hub, I discovered a major flaw in my math. To make the Wi-Fi wave shifts more obvious, I had applied a massive 50x multiplier to the raw subcarrier data. This caused a severe issue: because the multiplier was so high, it amplified microscopic thermal changes in the room. If the room temperature shifted, the variance baseline drifted, and the system would trigger a false "movement" alert in a completely empty room.
+
+**The Fix:** I completely stripped out the artificial multipliers. By forcing the Python engine to rely strictly on the true standard deviation of the 10-frame rolling buffer, the thermal noise vanished, and the baseline stabilised.
+
+The second critical failure occurred during impact testing. If I dropped a heavy stack of books off a table, the Wi-Fi CSI accurately detected the massive physical wave distortion and immediately flagged it as a fall. Dispatching an emergency response for a dropped book is completely unacceptable. Because Wi-Fi CSI cannot tell the difference between a human mass dropping and an inanimate object dropping, single-sensor logic is inherently flawed.
+
+**The Fix:** I hardcoded the LD2410C mmWave radar into the master logic loop to act as a definitive cross-reference. The new cause-and-effect logic is absolute: If the Wi-Fi variance spikes above 10.0, the system flags a potential event. It then immediately checks the radar. If the radar detects the micro-movements of human respiration at floor level, but absolutely zero walking macro-movement, only then is a fall confirmed. This completely eliminated the false positives.
+
+## Software Requirements Specification
+
+Following the BEng guidelines, I had to formally document the requirements and methodology driving this architecture.
+
+### Software Methodology Justification
+
+I am utilising a Hybrid Methodology (combining Waterfall and Agile).
+
+**Justification:** Because physical hardware procurement relies on rigid shipping times, Waterfall was necessary for the initial build phases. However, because real-world radio frequencies are messy and unpredictable, using Waterfall for the software would be disastrous. If I discovered the thermal noise issue in Week 8 under a strict Waterfall model, I wouldn't be able to step back and fix it. Agile allowed me to constantly rewrite and test the Python engine without shattering the project timeline.
+
+### Functional & Non-Functional Requirements
+
+**Functional:**
+
+The ESP32 network must autonomously generate a continuous 10-FPS UDP stream. If it relies on a user's phone to create traffic, the phone will eventually disconnect to save battery, and the system will starve for data.
+
+The system must calculate kinetic variance using Wi-Fi CSI and cross-reference it with 24GHz mmWave radar data.
+
+**Non-Functional:**
+
+Absolute Privacy: The system must not utilise any optical camera lenses. If a camera is used, the idea of privacy goes, making it completely unsuitable for high-risk areas like bathrooms.
+
+Latency: The processing and alert state must occur in under 3 seconds. If the Pi's USB buffer jams and delays the alert by 15 seconds, that lost time is life-threatening in an emergency.
+
+**User Requirements:**
+
+Zero Compliance: The system must operate completely passively. If it requires an elderly user to actively wear a pendant or remember to charge a watch, they will eventually forget. A safety system that relies on human memory is fundamentally flawed.
+
+## Design Diagrams (UML)
+
+I have completed the UML diagrams to map out this finalised logic.
+
+### Use Case Diagram: 
+![Use Case Diagram](/use-case-diagram-placeholder.jpg)
+
+### Sequence Diagram:
+![Sequence Diagram](/sequence-diagram-placeholder.jpg)
+    `,
+    date: '2026-03-09',
+    readingTime: '4 min read',
+    tags: ['Evaluation', 'Testing', 'UML', 'Requirements', 'Architecture'],
+    featured: false,
+    category: 'weekly-update',
+    imageUrl: '/use-case-diagram-placeholder.jpg',
+  },
 ]
 
 export const projects: Project[] = [
