@@ -63,7 +63,6 @@ const technologies = [
   { name: 'Python', category: 'AI/Logic' },
   { name: 'C++', category: 'Firmware' },
   { name: 'LD2410', category: 'mmWave Radar' },
-  { name: 'TensorFlow', category: 'ML Framework' },
 ]
 
 export function AboutContent() {

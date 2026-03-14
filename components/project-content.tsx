@@ -45,7 +45,7 @@ const techStack = [
   { name: 'LD2410 mmWave', category: 'Sensor', icon: Radio },
   { name: 'Python', category: 'Backend', icon: Code2 },
   { name: 'C/C++', category: 'Firmware', icon: Code2 },
-  { name: 'TensorFlow Lite', category: 'ML', icon: Brain },
+  { name: 'Alert System', category: 'Alerts', icon: Bell },
 ]
 
 const features = [
@@ -248,7 +248,7 @@ export function ProjectContent() {
               {[
                 { step: '01', title: 'Signal Capture', desc: 'ESP32 extracts CSI from Wi-Fi signals at 100Hz', icon: Wifi },
                 { step: '02', title: 'Feature Extraction', desc: 'Raspberry Pi processes signal patterns in real-time', icon: Cpu },
-                { step: '03', title: 'ML Classification', desc: 'TensorFlow Lite model classifies activity patterns', icon: Brain },
+                { step: '03', title: 'LD2410c Sensor', desc: 'LD2410c sensor detects breathing and consciousness', icon: Brain },
                 { step: '04', title: 'Alert System', desc: 'Immediate notification with vital sign status', icon: Bell },
               ].map((item, index) => (
                 <div key={item.step} className="relative">

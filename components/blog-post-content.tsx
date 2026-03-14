@@ -242,11 +242,11 @@ export function BlogPostContent({ post }: BlogPostContentProps) {
                       </AnimatedSection>
                     ),
                     p: ({ node, ...props }) => {
-                      // Check if the first child is an image to avoid wrapping it in extra spacing
-                      const isImage = React.Children.toArray(props.children).some(
-                        (child) => React.isValidElement(child) && child.type === 'img'
+                      // Check if the first child is an image by looking at the AST node to avoid wrapping it in an invalid <p>
+                      const hasImage = node?.children?.some(
+                        (child: any) => child.tagName === 'img'
                       )
-                      if (isImage) {
+                      if (hasImage) {
                         return <div className="my-16 lg:my-24">{props.children}</div>
                       }
                       return <p {...props} className="mb-8" />

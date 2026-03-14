@@ -190,61 +190,6 @@ By establishing a baseline signal and then physically walking directly between t
     imageUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1200',
   },
   {
-    slug: 'week-2-esp32-csi-extraction-setup',
-    title: 'Week 2: ESP32 CSI Extraction Setup',
-    excerpt: 'Setting up the development environment and extracting first CSI data from ESP32.',
-    content: `
-## Objectives for the Week
-
-- Set up ESP32 development environment
-- Flash modified firmware for CSI extraction
-- Capture first raw CSI data packets
-- Understand CSI data structure and format
-
-## Technical Challenges Faced
-
-The ESP32 doesn't natively expose CSI data through its standard APIs. I needed to use the ESP-IDF framework with specific configurations to access the low-level Wi-Fi subsystem.
-
-Key challenges included:
-- Understanding the CSI callback mechanism
-- Parsing the raw CSI data format (amplitude and phase for each subcarrier)
-- Dealing with noisy data from the 2.4GHz band
-
-## Solutions Implemented
-
-Successfully set up the toolchain and flashed the CSI-enabled firmware:
-
-\`\`\`cpp
-// CSI callback registration
-esp_wifi_set_csi_rx_cb(&wifi_csi_rx_cb, NULL);
-
-// CSI configuration
-wifi_csi_config_t csi_config = {
-    .lltf_en = true,
-    .htltf_en = true,
-    .stbc_htltf2_en = true,
-    .ltf_merge_en = true,
-    .channel_filter_en = false,
-    .manu_scale = false,
-};
-\`\`\`
-
-The CSI data contains 52 subcarriers, each with amplitude and phase information that changes based on human movement in the environment.
-
-## Next Steps
-
-- Implement data logging to Raspberry Pi
-- Begin collecting training data for fall vs. non-fall activities
-- Research signal processing techniques for CSI data
-    `,
-    date: '2025-01-27',
-    readingTime: '4 min read',
-    tags: ['ESP32', 'CSI', 'Firmware', 'C++'],
-    featured: false,
-    category: 'weekly-update',
-    imageUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1200',
-  },
-  {
     slug: 'supervisor-meeting-1-project-scope',
     title: 'Supervisor Meeting #1: Project Scope Discussion',
     excerpt: 'Initial meeting with supervisor to discuss project scope, feasibility, and timeline.',
@@ -363,9 +308,7 @@ Falls create a unique signature:
 
 This makes falls distinguishable from normal activities like sitting down quickly.
 
-## Next: Signal Processing Pipeline
 
-In the next technical post, I'll cover the signal processing pipeline for extracting features from raw CSI data.
     `,
     date: '2025-01-22',
     readingTime: '6 min read',
@@ -488,7 +431,7 @@ To stop the project from feeling like one massive, impossible mountain, I built 
 
 I separated the workload into highly specific phases: initial Radio Frequency (RF) research, hardware procurement, embedded C development (for the ESP32 Wi-Fi tripwire), Python backend processing (the Wave-Shift math engine), and finally, the sensor fusion logic tying in the LD2410C radar. Mapping it out like this was a game-changer. It clearly highlighted the true scope of the project and gave me a tangible checklist to work through, rather than just blindly coding and hoping it all connects at the end.
 
-![Work Breakdown Structure](/wbs-image-placeholder.jpg)
+![Work Breakdown Structure](/wbs.png)
 
 ## Gantt Chart
 
@@ -496,14 +439,14 @@ With the WBS outlining what needed to be done, I used a Gantt chart to map out w
 
 Plotting the tasks on a visual timeline helped me lock in strict dependencies and allocate specific weeks for coding, debugging, and physical testing. I used a timeline tool to visually stack the tasks leading up to the final submission in April. It gives me a clear sequence of deadlines and, most importantly, ensures I have enough buffer time for the inevitable troubleshooting that comes with custom hardware integration.
 
-![Gantt Chart](/gantt-image-placeholder.jpg)
+![Gantt Chart](/ganttchart.png)
     `,
     date: '2026-02-23',
     readingTime: '3 min read',
     tags: ['Planning', 'WBS', 'Gantt Chart', 'Project Management'],
     featured: false,
     category: 'weekly-update',
-    imageUrl: '/wbs-image-placeholder.jpg',
+    imageUrl: '/wbs.png',
   },
   {
     slug: 'week-5-prototyping-aegis-system',
@@ -589,17 +532,17 @@ Zero Compliance: The system must operate completely passively. If it requires an
 I have completed the UML diagrams to map out this finalised logic.
 
 ### Use Case Diagram: 
-![Use Case Diagram](/use-case-diagram-placeholder.jpg)
+![Use Case Diagram](/umlusecasehoriz.png)
 
 ### Sequence Diagram:
-![Sequence Diagram](/sequence-diagram-placeholder.jpg)
+![Sequence Diagram](/umlsequencediagram.png)
     `,
     date: '2026-03-09',
     readingTime: '4 min read',
     tags: ['Evaluation', 'Testing', 'UML', 'Requirements', 'Architecture'],
     featured: false,
     category: 'weekly-update',
-    imageUrl: '/use-case-diagram-placeholder.jpg',
+    imageUrl: '/umlusecasehoriz.png',
   },
 ]
 
@@ -634,30 +577,6 @@ A.E.G.I.S uses commodity Wi-Fi signals to detect falls by analyzing wave distort
     githubUrl: 'https://github.com',
     featured: true,
     status: 'in-progress',
-  },
-  {
-    slug: 'csi-data-collector',
-    title: 'CSI Data Collection Tool',
-    description: 'Python tool for collecting and labeling Wi-Fi CSI data for ML training.',
-    longDescription: `
-A comprehensive data collection and labeling tool designed specifically for Wi-Fi CSI research.
-
-## Features
-
-- Real-time CSI visualization
-- Activity labeling interface
-- Automated data segmentation
-- Export to multiple formats (CSV, NumPy, TensorFlow)
-- Support for multiple ESP32 devices
-
-## Technical Details
-
-Built with Python using PyQt5 for the GUI and NumPy/Pandas for data processing. Communicates with ESP32 devices via serial connection.
-    `,
-    tags: ['Python', 'PyQt5', 'Data Collection', 'Wi-Fi CSI'],
-    githubUrl: 'https://github.com',
-    featured: false,
-    status: 'completed',
   },
   {
     slug: 'esp32-csi-firmware',
