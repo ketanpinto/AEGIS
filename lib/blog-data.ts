@@ -544,6 +544,54 @@ I have completed the UML diagrams to map out this finalised logic.
     category: 'weekly-update',
     imageUrl: '/umlusecasehoriz.png',
   },
+  {
+    slug: 'week-7-hardware-integration-uart-breakthrough',
+    title: 'Week 7: Hardware Integration & the UART Breakthrough',
+    excerpt: 'Integrating the HLK-LD2410C mmWave radar with Raspberry Pi 5 and overcoming UART communication challenges.',
+    content: `
+This week was the "make or break" phase for the A.E.G.I.S. hardware architecture. While the Wi-Fi CSI math has been progressing in simulation, the project requires a physical "truth sensor" to eliminate false positives. My goal was to integrate the HLK-LD2410C mmWave radar, but I quickly discovered that hardware integration on the new Raspberry Pi 5 comes with its own set of unique challenges.
+
+## The UART Troubleshooting Phase
+
+The primary hurdle was a "silent failure" in communication. Despite the radar being powered correctly (verified via a smartphone BLE app), the Raspberry Pi 5 remained "deaf" to the incoming data stream.
+
+**The Conflict:** I initially attempted to communicate via the standard \`/dev/serial0\` alias. However, the Pi 5’s OS architecture handles serial mapping differently than previous models, often leaving this alias disconnected from the physical GPIO pins.
+
+**The Loopback Solution:** To prove the software environment was functional, I performed a Hardware Loopback Test. By physically bridging the Pi’s TX and RX pins (Pins 8 and 10) and sending a test string, I confirmed that the Pi could "hear itself" only when using the specific hardware port: \`/dev/ttyAMA0\`.
+
+![Hardware Loopback Test](/week7-terminal.png)
+
+**The Fix:** Once I remapped the Python script to use \`/dev/ttyAMA0\`, the data floodgates opened.
+
+## Decoding the Hexadecimal Heartbeat
+
+With the port open, I successfully captured a constant stream of raw hexadecimal packets. The LD2410C communicates at a high-speed 256,000 baud rate, sending frames starting with the header \`f4f3f2f1\`.
+
+I have now developed a preliminary parsing script to isolate the Target State Byte (Index 8 of the packet). This is the "intelligence" of the sensor, allowing the system to identify:
+
+- **0x00 (Empty):** No presence detected.
+- **0x01 (Moving):** Active human motion (Macro).
+- **0x02 (Stationary):** Human presence detected through micro-movements/respiration.
+
+![Hexadecimal Parsing Code](/week7-code.png)
+
+## Summary of Progress
+
+- **Hardware:** Successfully wired and verified the LD2410C via UART pins.
+- **Software:** Built a functional Python environment with \`pyserial\` to listen to the radar.
+- **Troubleshooting:** Resolved the Pi 5 serial port mapping conflict using loopback diagnostics.
+
+## Next Milestone
+
+Now that I have the raw data streaming into the terminal, the next step is to integrate this logic into my existing Dashboard GUI and the Master Logic Gate. This will allow the SPI screen to change color based on the radar's state and begin the process of cross-referencing radar data with Wi-Fi CSI spikes.
+    `,
+    date: '2026-03-16',
+    readingTime: '4 min read',
+    tags: ['Hardware', 'Radar', 'UART', 'Raspberry Pi 5', 'Troubleshooting'],
+    featured: false,
+    category: 'weekly-update',
+    imageUrl: '/week-7-radar.png',
+  },
 ]
 
 export const projects: Project[] = [
