@@ -12,20 +12,20 @@ const contactLinks = [
   {
     icon: Mail,
     label: 'Email',
-    value: 'student@mdx.ac.ae',
-    href: 'mailto:student@mdx.ac.ae',
+    value: 'ketanpinto16@gmail.com',
+    href: 'mailto:ketanpinto16@gmail.com',
   },
   {
     icon: Github,
     label: 'GitHub',
-    value: 'github.com/aegis-project',
-    href: 'https://github.com',
+    value: 'github.com/ketanpinto',
+    href: 'https://github.com/ketanpinto',
   },
   {
     icon: Linkedin,
     label: 'LinkedIn',
     value: 'Connect on LinkedIn',
-    href: 'https://linkedin.com',
+    href: 'https://linkedin.com/in/ketanpinto',
   },
   {
     icon: GraduationCap,

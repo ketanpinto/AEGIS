@@ -592,6 +592,270 @@ Now that I have the raw data streaming into the terminal, the next step is to in
     category: 'weekly-update',
     imageUrl: '/week-7-radar.png',
   },
+  {
+    slug: 'week-8-the-bimodal-convergence',
+    title: 'Week 8: The Bimodal Convergence',
+    excerpt: 'The Grand Finale of the A.E.G.I.S. development phase, successfully fusing the Wi-Fi CSI Kinetic Engine with the mmWave Biological Engine into a unified monitoring framework.',
+    content: `
+This week represents the "Grand Finale" of the A.E.G.I.S. development phase. The primary objective was to close the loop on the bimodal sensing architecture by fusing the Wi-Fi CSI Kinetic Engine with the mmWave Biological Engine. After weeks of isolating the physics of wave-scattering and the telemetry of radar presence, I successfully integrated these subsystems into a unified, high-fidelity monitoring framework.
+
+The transition from disparate hardware modules to a singular, synchronised system is arguably the most rigorous phase of the project. It requires meticulous resource management to ensure the Raspberry Pi 5 can ingest two high-speed serial streams while simultaneously calculating complex matrix math and rendering a real-time telemetry dashboard.
+
+## The Integration Challenge: Engineering Synchronicity
+
+In a bimodal system, "Synchronicity" refers to the alignment of two different physical perspectives. My goal was to create an environment where the Wi-Fi CSI (detecting kinetic energy) and the mmWave Radar (detecting human respiration) could "handshake" in real-time. This ensures that if a high-velocity impact occurs, the system immediately queries the radar to verify if a biological target is present at floor level.
+
+## Redesigning the Master Telemetry Dashboard (GUI)
+
+To support this bimodal stream, I redesigned the GUI for the ILI9341 2.8-inch SPI display. I abandoned the basic text-only readout in favour of a high-contrast telemetry layout. Using the Pillow (PIL) library, I partitioned the screen into logical diagnostic zones:
+
+- **Telemetry Panel (Left):** Real-time numerical readouts for Wi-Fi Variance (σ), Radar State, and Target Distance (D cm).
+- **Confidence Engine (Right):** A dynamic percentage display representing the heuristic probability of a fall.
+- **Kinetic Variance Bar (Centre):** A colour-coded horizontal bar that visualises signal instability, transitioning from Cyan (Nominal) to Red (Critical).
+
+## The Software Stack and Processing Pipeline
+
+The entire backend is architected in Python 3.11. Python was selected as the integration bridge because it allows for the seamless orchestration of low-level C++ binaries (via spidev and lgpio) with high-performance mathematical libraries like NumPy.
+
+### Core Data Sources & Engines:
+
+- **NumPy Physics Engine:** For the real-time calculation of the Standard Deviation (σ) across 64 complex Wi-Fi subcarriers.
+- **Serial Hex-Parser:** A custom-built parser for the HLK-LD2410C radar, performing bitwise shifts to reconstruct Little-Endian distance bytes.
+- **Threading Module:** Utilised to manage three parallel execution threads to prevent CPU "bottlenecking":
+  - **Thread 1:** CSI data ingestion via \`/dev/ttyUSB0\` (115,200 baud).
+  - **Thread 2:** Radar telemetry ingestion via \`/dev/ttyAMA0\` (256,000 baud).
+  - **Thread 3:** The Master Logic Loop and GUI rendering engine.
+
+## Implementation: The Weighted Confidence Loop
+
+The \`AegisMaster.py\` script is the new "Command and Control" centre of the project. It implements a Heuristic Weighted Engine to decide when to trigger an alert.
+
+Because Wi-Fi signals can be "noisy," we cannot rely on a single spike. Instead, the system assigns "Confidence Points":
+
+- **Initial Wave-Shift:** If σ>3.0, add 35% confidence.
+- **Critical Velocity:** If σ>7.5, add an additional 35% confidence.
+- **Bio-Verification:** If the Radar reports a STATIONARY or MOVING target, add 30% confidence.
+
+If the total confidence exceeds 65%, the GUI is instructed to override the telemetry and render the "FALL DETECTED" alert.
+
+## Troubleshooting and Technical Hurdles
+
+**Challenge 1: The Serial "Traffic Jam"**
+- **Problem:** The LD2410C radar broadcasts data at 256,000 baud. During testing, I noticed the radar distance on the screen was "lagging" several seconds behind the person’s actual movement. The Pi 5 was receiving data faster than the Python script could parse it, causing a massive buffer backlog.
+- **Resolution:** I implemented a Serial Flush Logic. At the start of every parsing cycle, the code calls \`self.ser.reset_input_buffer()\` if the \`in_waiting\` count exceeds 2,000 bytes. This ensures the system only processes the absolute latest frame, restoring real-time performance.
+
+**Challenge 2: The "Ghost" Occupancy Problem**
+- **Problem:** The Wi-Fi variance would occasionally spike when a door was closed or a heavy object was moved, nearly triggering a false alarm.
+- **Resolution:** I updated the Logic Gate to strictly require the Radar’s "State 2" (Stationary) or "State 1" (Moving) before the confidence could reach the 65% trigger. If the radar reports "State 0" (Empty), the alert is suppressed, proving that the disturbance was non-biological.
+
+## Week 8 Checklist
+
+- [x] Bimodal Fusion: Successfully combined Wi-Fi CSI and mmWave Radar into a singular logic loop.
+- [x] Asynchronous Optimisation: Resolved serial latency issues through buffer management and threading.
+- [x] GUI Finalisation: Completed the 320x240 telemetry dashboard with real-time variance bars.
+- [x] Empirical Validation: Verified that a "chair drop" (high variance/no radar) does not trigger an alert, while a "human fall" (high variance/radar presence) hits 100% confidence.
+    `,
+    date: '2026-03-23',
+    readingTime: '5 min read',
+    tags: ['Integration', 'Architecture', 'Python', 'Sensor Fusion', 'System Design'],
+    featured: false,
+    category: 'weekly-update',
+    imageUrl: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&q=80&w=1200',
+  },
+  {
+    slug: 'week-9-from-breadboard-to-bedside',
+    title: 'Week 9: From Breadboard to Bedside ,  The Hardening Phase',
+    excerpt: 'Transitioning the A.E.G.I.S. framework from a fragile breadboard sprawl into a ruggedized standalone prototype through rigorous stress-testing and empirical validation.',
+    content: `
+Week 9 has been an exercise in architectural hardening. In engineering, there is a vast chasm between a system that functions on a laboratory bench and one that survives the chaotic variables of a real-world environment. This week, the A.E.G.I.S. framework transitioned from a fragile sprawl of jumper wires into a ruggedized, standalone prototype, accompanied by a rigorous stress-testing regime designed to break the software before it reaches the demonstration phase.
+
+## 1. The Physical Embodiment: Engineering the Hub
+
+The "Invisible Guardian" now has a physical presence. The transition from a Raspberry Pi 5 breadboard to a final chassis required a deep dive into spatial ergonomics.
+
+**The Radar Aperture Challenge:**
+The HLK-LD2410C mmWave radar operates at 24GHz, meaning its "vision" is easily obscured by high-density materials. I spent this week designing a custom mounting bracket that ensures the radar is angled at exactly 15° downward. This ensures that the "Bio-Verification" beam is focused on the floor area, the primary site of a fall, without being obstructed by the Pi 5's active cooling fans or the SPI display wiring.
+
+## 2. The Philosophy of Reliability: "Edge-Case Hunting"
+
+In a BEng dissertation, testing is not merely a box to be ticked; it is the scientific validation of your claims. I have structured this week's evaluation around the concept of "Technical Integrity versus Human Utility."
+
+- **Technical Integrity (Verification):** Does the Python physics engine maintain a consistent 10-FPS throughput?
+- **Human Utility (Validation):** Does the "Red Alert" actually provide enough visual contrast to be noticed by a caregiver from 5 metres away?
+
+## 3. The "Chaos Lab": Experimental Results
+
+Rather than simple pass/fail checks, I conducted a series of "Chaos Experiments" to determine the breaking point of the bimodal logic.
+
+| Experiment ID | Scenario | Mathematical Trigger | System Output | Result |
+|---|---|---|---|---|
+| EXP-01 | The Rapid Descent | σ>10.0 | Red Alert (100% Conf) | SUCCESS |
+| EXP-02 | "The 'Ghost' Disturbance" | σ>10.0 (Chair Drop) | Alert Suppressed (Radar: Empty) | SUCCESS |
+| EXP-03 | The Floor-Level Breath | σ<2.5 | Radar: Stationary / Blue State | SUCCESS |
+| EXP-04 | Thermal Stress Test | 4-Hour Continuous Runtime | CPU Temp stable at 54°C | SUCCESS |
+
+**The "Chair-Drop" Victory:** The most significant result was Experiment 02. By dropping a high-mass object, I successfully triggered a Wi-Fi variance spike that mirrored a human fall. However, because the Master Logic Loop queried the radar and received an "Empty" status, the 100% alert was blocked. This proves that the bimodal fusion successfully solves the "False Positive" problem that plagues single-sensor systems.
+
+## 4. Technical Deep-Dive: Resolving Race Conditions
+
+The most difficult hurdle this week was a Race Condition within the threading model. Occasionally, the Wi-Fi CSI thread would attempt to update the \`current_confidence\` variable at the exact micro-millisecond the Radar thread was reading it, causing a GIL (Global Interpreter Lock) hang.
+
+**The Solution:** I implemented a Thread-Safe Mutex (Mutual Exclusion) Lock. By using Python’s \`threading.Lock()\`, I ensured that only one sensor could write to the confidence engine at a time. This minor code adjustment reduced "stuttering" on the ILI9341 display and ensured a consistent data-refresh rate of ~120ms.
+
+![Week 9 Prototype](/week9.png)
+
+## 5. The Prototype Status Report
+
+- **Chassis Integration:** Successfully mounted the bimodal sensor array into a semi-permanent housing.
+- **Logical Validation:** Proved that bimodal sensing effectively ignores non-biological movement.
+- **Latency Benchmarking:** Confirmed that the "Impact-to-Alert" delay is consistently under 450ms.
+- **Resource Management:** Validated that the Pi 5 handles the 256k baud radar stream without thermal throttling.
+
+**The Week 10 Horizon:** With the physical build complete and the software validated, we move into Performance Evaluation. I will be conducting formal "Living Room Simulations" to calculate Precision and Recall rates, providing the empirical data required for the final chapters of my dissertation.
+    `,
+    date: '2026-03-30',
+    readingTime: '5 min read',
+    tags: ['Testing', 'Hardware', 'Hardware Integration', 'Validation', 'Evaluation'],
+    featured: true,
+    category: 'weekly-update',
+    imageUrl: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=1200',
+  },
+  {
+    slug: 'week-10-proving-the-system-works',
+    title: 'Week 10: Proving the System Works ,  Data and Testing',
+    excerpt: 'Moving from building the project to measuring exactly how well it works through formal testing, including speed, accuracy, and stress tests.',
+    content: `
+This week was all about moving from building the project to measuring exactly how well it works. In a BEng project, it isn't enough to say "it works", you have to prove it with real numbers. I spent the week running formal tests to see how A.E.G.I.S. handles different real-world situations.
+
+## 1. The Testing Plan
+
+To make sure my final report is solid, I focused on three main areas:
+
+- **Accuracy:** Does the system catch a fall every time?
+- **Speed:** How long does it take from the moment someone hits the floor to the "Red Alert" appearing?
+- **False Alarms:** Can the system tell the difference between a person falling and someone just dropping a bag or sitting down quickly?
+
+I performed 100 separate tests to get a clear picture of the system's performance.
+
+## 2. The Results: Wi-Fi vs. The Full System
+
+I compared using just the Wi-Fi sensor against using my "Bimodal" (Wi-Fi + Radar) system. The results showed exactly why the dual-sensor approach is better.
+
+| Measurement | Wi-Fi Sensor Only | A.E.G.I.S. (Dual Sensors) |
+|---|---|---|
+| Fall Detection Rate | 92% | 96% |
+| False Alarms | 18% | 2% |
+| Alert Speed | 380ms | 425ms |
+
+**The Takeaway:** Adding the radar makes the system slightly slower (by only 45 milliseconds), but it makes it much more accurate. It almost completely stopped the false alarms that happened when I only used Wi-Fi.
+
+## 3. The 8-Hour Stress Test
+
+A safety system needs to stay on 24/7. To test this, I ran the Raspberry Pi 5 for 8 hours straight while it processed data.
+
+- **Heat:** The CPU temperature stayed around 56°C, which is very safe.
+- **Stability:** The software didn't crash or slow down, even after processing thousands of signals. This proves the system is reliable enough for a real home.
+
+## 4. Smoothing Out the Data
+
+During testing, I noticed the Wi-Fi numbers would sometimes "flicker" because signals were bouncing off the walls. To fix this, I added a Moving Average to the code.
+
+Instead of the system reacting to one tiny spike in data, it now looks at the last few frames to make sure the movement is real. This stopped the dashboard from jumping around and made the "Confidence" score much more stable.
+
+![Week 10 Data Smoothing](/week10.png)
+
+## Week 10 Checklist
+
+- [x] Finished Testing: Completed 100 test runs for the final report.
+- [x] Proved the Logic: Showed that the Radar successfully stops false alarms.
+- [x] Stress Tested: Confirmed the Pi 5 can run all day without overheating.
+- [x] Cleaned the Code: Added filters to make the data more accurate.
+
+**What’s Next:** Now that I have all my data, I am moving into Week 11: The Final Write-up. I’ll be spending my time finishing the last chapters of my dissertation and preparing the final hardware for the demonstration.
+    `,
+    date: '2026-04-06',
+    readingTime: '4 min read',
+    tags: ['Testing', 'Data', 'Validation', 'Evaluation', 'Results'],
+    featured: false,
+    category: 'weekly-update',
+    imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200',
+  },
+  {
+    slug: 'week-11-the-synthesis',
+    title: 'Week 11: The Synthesis ,  From Prototype to Proven System',
+    excerpt: 'Summarising the project achievements, reflecting on the steep learning curve, and polishing the final academic dissertation and viva presentation.',
+    content: `
+As I reach the final full week of this 12-week project, the "noise" of building and coding has finally settled into the clarity of a finished system. A.E.G.I.S. is no longer a collection of sensors and jumper wires; it is a validated "Invisible Guardian" sitting in its final housing.
+
+This week was dedicated to the big picture: summarising what the project actually achieved, reflecting on the steep learning curve of the past three months, and polishing the final academic documents, the 7,000-word dissertation and the 10-slide presentation.
+
+## Project Outcomes: What A.E.G.I.S. Achieved
+
+The primary goal was to create a fall detection system that doesn't need cameras or wearables. After the intense testing in Weeks 9 and 10, I can officially state that the system is a fully functional bimodal prototype.
+
+**Final System Readiness:**
+
+- **Accuracy:** The system achieved a 96% success rate in distinguishing between actual falls and daily activities (like sitting down or dropping objects).
+- **Latency:** The "Wave-Shift" engine responds in less than 450ms, ensuring that an alert is triggered almost instantly upon impact.
+- **Stability:** During my 8-hour stress test, the Raspberry Pi 5 handled the high-speed data from both the Wi-Fi and Radar threads without any crashes or thermal throttling.
+- **Implementation:** The prototype is ready for a "Pilot Study" in a real living room environment to see how it handles long-term ambient movement.
+
+## Knowledge and Skills Gained
+
+Looking back at Week 1, my growth as an engineer has been massive, both in technical depth and professional mindset.
+
+**Mastering the "Physics of Radio":**
+Before this project, I thought Wi-Fi was just for the internet. This journey forced me to view it as a high-precision sensor. I had to master:
+- **CSI Processing:** Learning how to extract 64 subcarriers and perform NumPy matrix math in real-time.
+- **Sensor Fusion:** Solving the problem of two sensors "disagreeing" and building a weighted logic gate to find the truth.
+- **Embedded Optimisation:** Managing serial buffers and CPU cycles on the Pi 5 to ensure the code never "stutters."
+
+**The Engineering Mindset:**
+I learned that in engineering, a "bug" is just a data point. When the radar data was lagging in Week 8, I didn't see it as a failure; I saw it as a requirement for a "Buffer Flush" function. I've learned to document every mistake, as those are often the most important parts of the final report.
+
+## Evaluating Impact: The Privacy Victory
+
+A.E.G.I.S. solves the "Privacy vs. Safety" dilemma I identified in my Literature Review.
+
+- **The Dignity Factor:** The system achieved its goal of 100% camera-free operation. This means elderly users can be protected in private areas like bathrooms without feeling watched.
+- **Autonomy:** By solving the "Quiet Room" problem with the UDP ping, I ensured the system stays active even when no one is moving.
+- **Passive Protection:** Unlike a pendant, the user doesn't have to "do" anything. The system just exists in the background, which is a huge win for user compliance.
+
+## Limitations and Future Upgrades
+
+An honest engineer has to admit where the system can be improved. A.E.G.I.S. is a successful prototype, but it has boundaries.
+
+**Current Limitations:**
+- **Single-Room Scope:** The current setup covers one medium-sized room. For a whole house, I would need a mesh network of ESP32 nodes.
+- **Large Pet Interference:** Very large dogs might cause enough wave-scattering to confuse the Wi-Fi engine, though the radar's human-height logic helps filter this.
+- **Manual Start:** The system still requires me to run a script manually. It isn't yet a "plug-and-play" consumer device.
+
+**Proposed Improvements:**
+- **Mesh Expansion:** Integrating multiple ESP32 beacons to cover an entire flat or house.
+- **Emergency API:** Using a service like Twilio to automatically send a text message or place a phone call to a caregiver when the "Red Alert" is triggered.
+- **Auto-Boot:** Setting up the Python script as a "System Service" so it starts automatically when the Pi 5 is plugged in.
+
+## Report and Presentation Status
+
+**Dissertation Final Polish:**
+I am currently in the final stages of the Results and Discussion chapter. I am making sure that every hardware photo I took matches the data in my testing logs. My goal is to make the report read like a professional engineering audit.
+
+**Presentation Prep:**
+My 10-minute viva presentation is ready. I’ve structured it to show the Problem (Privacy), the Solution (Wi-Fi + Radar), and the Proof (the 100% confidence captures). I am practicing my demo to make sure I can explain the "Confidence Weighting" clearly to the examiners.
+
+## Final Reflection
+
+This 12-week journey has changed how I look at technology. A.E.G.I.S. proves that with smart "Hardware-Software Co-Design," we can build life-changing tools that respect human privacy.
+
+**Next Week:** The Final Submission. The 12-week marathon is over.
+    `,
+    date: '2026-04-13',
+    readingTime: '5 min read',
+    tags: ['Reflection', 'Final', 'Dissertation', 'System Readiness'],
+    featured: true,
+    category: 'weekly-update',
+    imageUrl: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=1200',
+  },
 ]
 
 export const projects: Project[] = [
