@@ -190,56 +190,124 @@ By establishing a baseline signal and then physically walking directly between t
     imageUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1200',
   },
   {
-    slug: 'supervisor-meeting-1-project-scope',
-    title: 'Supervisor Meeting #1: Project Scope Discussion',
-    excerpt: 'Initial meeting with supervisor to discuss project scope, feasibility, and timeline.',
+    slug: 'meeting-log-01-project-initiation',
+    title: 'Meeting Log 01: Project Initiation and Architectural Paradigm Definition',
+    excerpt: 'Definition of the "Dignity Gap" and Approval of Sensor-Fusion Methodology',
     content: `
 ## Meeting Details
 
-**Date:** January 18, 2025  
-**Duration:** 45 minutes  
-**Attendees:** Supervisor, Student
+**Date:** 29 January 2026  
+**Attendees:** Ketan Clint Pinto, Mr. Roshan Renji (Supervisor)  
+**Subject:** Definition of the "Dignity Gap" and Approval of Sensor-Fusion Methodology
 
 ---
 
-## Topics Discussed
+The inaugural supervisory meeting was convened to establish the primary objectives and technical scope of the final year dissertation. The initial project proposal focused on assistive technology for geriatric care; however, the discussion necessitated a critical re-evaluation of existing market solutions. The supervisor highlighted the ethical and practical limitations of contemporary systems—specifically, the severe privacy infringements associated with optical camera surveillance and the high failure rates of wearable telemetry due to patient non-compliance or cognitive decline. This problem space was formally defined as the "Dignity Gap" in modern elderly care.
 
-1. Overall project feasibility and scope
-2. Hardware requirements and budget
-3. Timeline for prototype development
-4. Ethical considerations for elderly monitoring
-
-## Key Feedback Received
-
-- **Scope:** Supervisor approved the Wi-Fi CSI + mmWave fusion approach. Emphasized the importance of documenting the privacy-preserving nature of the system.
-
-- **Hardware:** Suggested starting with a single-room prototype before scaling. Approved the ESP32 and Raspberry Pi choices.
-
-- **Timeline:** Recommended having a working fall detection prototype by Week 8 to allow time for testing and refinement.
-
-- **Ethics:** Reminded to consider GDPR implications even for non-image data. Suggested adding a "system active" indicator for transparency.
-
-## Action Items
-
-| Priority | Task | Deadline |
-|----------|------|----------|
-| High | Complete hardware procurement | Week 2 |
-| High | Set up development environment | Week 2 |
-| Medium | Draft ethics consideration document | Week 3 |
-| Medium | Create system architecture diagram | Week 3 |
-| Low | Research existing CSI-based systems | Ongoing |
-
-## Notes for Next Meeting
-
-- Prepare demonstration of raw CSI data capture
-- Bring preliminary system architecture for review
+To address these fundamental flaws, a paradigm shift toward entirely passive, device-free monitoring was proposed. The theoretical foundation of utilizing Radio Frequency (RF) signals was examined. It was concluded that relying on traditional Received Signal Strength Indicators (RSSI) would yield insufficient granularity for life-critical applications. Consequently, the extraction of fine-grained Wi-Fi Channel State Information (CSI) was formally adopted as the primary kinetic sensing method. Furthermore, to mitigate the "unconscious state" limitation—wherein a fallen individual remains static—a bimodal sensor-fusion architecture was proposed. The supervisor approved the integration of an HLK-LD2410C millimetre-wave (mmWave) Frequency Modulated Continuous Wave (FMCW) radar to serve as a secondary biological verification layer. The meeting concluded with the formal approval of the hardware procurement list, establishing the Raspberry Pi 5 as the central computational hub and two ESP32 microcontrollers as the RF transceiver network.
     `,
-    date: '2025-01-18',
+    date: '2026-01-29',
     readingTime: '3 min read',
-    tags: ['Meeting', 'Planning', 'Feedback'],
+    tags: ['Meeting', 'Planning', 'Architecture'],
     featured: false,
     category: 'supervisor-meeting',
     imageUrl: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=1200',
+  },
+  {
+    slug: 'meeting-log-02-network-dormancy',
+    title: 'Meeting Log 02: Resolution of the Network Dormancy Phenomenon',
+    excerpt: 'Embedded Systems Refinement and Autonomous Traffic Generation',
+    content: `
+## Meeting Details
+
+**Date:** 16 February 2026  
+**Attendees:** Ketan Clint Pinto, Mr. Roshan Renji  
+**Subject:** Embedded Systems Refinement and Autonomous Traffic Generation
+
+---
+
+The second meeting addressed a critical systemic failure discovered during the preliminary hardware deployment phase. The initial network architecture relied on a standard mobile device (e.g., a smartphone) authenticating with the ESP32 access point to generate the necessary Wi-Fi traffic for CSI extraction. Empirical testing revealed that modern mobile operating systems aggressively suspend inactive Wi-Fi antennas to optimize battery consumption. Consequently, the network entered a dormant state, ceasing wave generation and rendering the fall detection framework entirely inoperable without continuous active user engagement.
+
+The supervisor utilized this impediment to emphasize the rigorous standards required for autonomous life-safety systems. It was established that the architecture could not possess external dependencies. A complete redesign of the ESP32 firmware was necessitated. Under the supervisor's guidance, the development focus transitioned to low-level embedded programming utilizing C and FreeRTOS. An autonomous background task was engineered for the ESP32 Receiver, designed to transmit a standard User Datagram Protocol (UDP) packet at a strict frequency of 10 Hertz. Additionally, the microcontrollers' native power-saving protocols were programmatically disabled. This hardware-level intervention successfully bypassed the network dormancy issue, establishing a permanent, self-sustaining Wi-Fi tripwire. The supervisor validated this approach, confirming that the system architecture was now appropriately autonomous for continuous monitoring.
+    `,
+    date: '2026-02-16',
+    readingTime: '3 min read',
+    tags: ['Meeting', 'Hardware', 'Networking'],
+    featured: false,
+    category: 'supervisor-meeting',
+    imageUrl: 'https://images.unsplash.com/photo-1522071823991-b99c5517a7EB?auto=format&fit=crop&q=80&w=1200',
+  },
+  {
+    slug: 'meeting-log-03-asynchronous-data-ingestion',
+    title: 'Meeting Log 03: Asynchronous Data Ingestion and Latency Mitigation',
+    excerpt: 'Serial Buffer Saturation and Real-Time Algorithmic Optimization',
+    content: `
+## Meeting Details
+
+**Date:** 03 March 2026  
+**Attendees:** Ketan Clint Pinto, Mr. Roshan Renji  
+**Subject:** Serial Buffer Saturation and Real-Time Algorithmic Optimization
+
+---
+
+By the third supervisory session, the physical hardware array and the initial Python data-parsing scripts had been successfully integrated. However, performance benchmarking revealed a severe asynchronous latency issue. During simulated fall events, the system exhibited a delayed response time exceeding 15 seconds. The supervisor conducted a code review and identified a critical data ingestion bottleneck. The Raspberry Pi 5 was receiving 64 complex subcarriers at 10 frames per second, but the Python engine's NumPy matrix calculations could not process the arrays synchronously. This discrepancy resulted in a massive queue of unread bytes accumulating within the USB serial buffer, forcing the system to analyze heavily outdated telemetry during real-time emergencies.
+
+To rectify this, the supervisor mandated the implementation of a strict queue-flushing protocol within the serial listener thread. The software was updated to continuously monitor the in_waiting buffer metric. A logical failsafe was introduced: should the queue exceed 2,000 bytes, the script automatically executes a reset_input_buffer() command. This mechanism instantaneously purges obsolete data, ensuring the mathematical engine consistently evaluates the most recent physical frame. Concurrently, the detection mathematics were refined. The flawed raw amplitude thresholding method was discarded in favour of a "Wave-Shift" algorithm, which calculates standard deviation across a rolling 10-frame buffer to dynamically filter ambient thermal noise. Subsequent testing demonstrated that these optimizations successfully reduced system latency to sub-500 milliseconds.
+    `,
+    date: '2026-03-03',
+    readingTime: '3 min read',
+    tags: ['Meeting', 'Optimization', 'Python'],
+    featured: false,
+    category: 'supervisor-meeting',
+    imageUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1200',
+  },
+  {
+    slug: 'meeting-log-04-sensor-fusion-heuristics',
+    title: 'Meeting Log 04: Sensor Fusion Heuristics and False Positive Suppression',
+    excerpt: 'Bimodal Logic Gate Calibration and Disturbance Differentiation',
+    content: `
+## Meeting Details
+
+**Date:** 19 March 2026  
+**Attendees:** Ketan Clint Pinto, Mr. Roshan Renji  
+**Subject:** Bimodal Logic Gate Calibration and Disturbance Differentiation
+
+---
+
+As the project transitioned into its final developmental phases, the focus shifted entirely to system reliability and the elimination of false-positive alerts. The Wi-Fi CSI engine demonstrated exceptional sensitivity, accurately detecting high-velocity impacts. However, during a controlled demonstration, the dropping of a high-mass inanimate object (a backpack) triggered a critical alert. The supervisor emphasized that in a real-world geriatric care environment, a system prone to non-biological false alarms would be deemed clinically unacceptable. This necessitated the immediate refinement of the master logic loop to fully incorporate the mmWave radar data.
+
+The session involved a rigorous analysis of heuristic weighting and logical gate design. The confidence engine was algorithmically recalibrated to prevent Wi-Fi variance from autonomously triggering an alert. The logic was restructured to assign a maximum confidence interval of 70% to high-intensity kinetic disturbances. To achieve the 100% threshold required to initiate the emergency protocol, the engine must receive immediate biological verification from the LD2410C radar. Specifically, the radar must report a "State 2 (STATIONARY)" status, confirming the presence of micro-Doppler respiratory shifts at floor level. When the inanimate object drop test was repeated, the Wi-Fi variance spiked, but the radar correctly reported an "EMPTY" state. The confidence metric remained capped at 70%, and the alert was successfully suppressed. The supervisor approved this bimodal confirmation logic as the definitive solution to the false-positive dilemma.
+    `,
+    date: '2026-03-19',
+    readingTime: '4 min read',
+    tags: ['Meeting', 'Sensor Fusion', 'Testing'],
+    featured: false,
+    category: 'supervisor-meeting',
+    imageUrl: 'https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&q=80&w=1200',
+  },
+  {
+    slug: 'meeting-log-05-methodological-validation',
+    title: 'Meeting Log 05: Methodological Validation and Final Review',
+    excerpt: 'Empirical Data Finalization and Dissertation Audit',
+    content: `
+## Meeting Details
+
+**Date:** 02 April 2026  
+**Attendees:** Ketan Clint Pinto, Mr. Roshan Renji  
+**Subject:** Empirical Data Finalization and Dissertation Audit
+
+---
+
+The final supervisory meeting was dedicated to academic validation and the critical review of the empirical data necessary for the dissertation's testing chapter. The supervisor reinforced the principle that engineering claims must be substantiated by quantifiable, reproducible metrics rather than subjective observation. Consequently, the methodology for the testing phase was thoroughly audited. The results of the 100-trial environmental simulation and the 8-hour continuous load stress test were presented and analysed.
+
+The empirical data confirmed that the A.E.G.I.S. framework achieved a 96% true-positive classification rate, an average latency of 418 milliseconds, and maintained a stable thermal plateau of 58.2°C under continuous NumPy processing. The supervisor reviewed the 11 formal test cases formatted for Chapter 9, ensuring that all procedural placeholders were replaced with explicit, recorded metrics to guarantee academic integrity. Furthermore, a comprehensive review of the 8,000-word dissertation was conducted. The supervisor verified that all referencing adhered strictly to the Harvard academic standard, ensuring that foundational literature regarding Wi-Fi CSI and mmWave technologies was appropriately cited within the text. Following the verification of the signed Generative AI and Ethics compliance forms, the supervisor formally approved the physical prototype and the written documentation for final submission and demonstration.
+    `,
+    date: '2026-04-02',
+    readingTime: '3 min read',
+    tags: ['Meeting', 'Validation', 'Review'],
+    featured: false,
+    category: 'supervisor-meeting',
+    imageUrl: 'https://images.unsplash.com/photo-1456406644174-8ddd4cd52a06?auto=format&fit=crop&q=80&w=1200',
   },
   {
     slug: 'technical-deep-dive-wifi-csi',
@@ -369,55 +437,7 @@ This week has strengthened the research foundation of the project and ensured th
     category: 'weekly-update',
     imageUrl: 'https://images.unsplash.com/photo-1456406644174-8ddd4cd52a06?auto=format&fit=crop&q=80&w=1200',
   },
-  {
-    slug: 'supervisor-meeting-2-progress-review',
-    title: 'Supervisor Meeting #2: Progress Review',
-    excerpt: 'Second supervisor meeting reviewing hardware setup progress and discussing ML approach.',
-    content: `
-## Meeting Details
 
-**Date:** February 1, 2025  
-**Duration:** 30 minutes  
-**Attendees:** Supervisor, Student
-
----
-
-## Topics Discussed
-
-1. Hardware setup progress demonstration
-2. CSI data quality assessment
-3. Machine learning approach for fall detection
-4. Timeline adjustments
-
-## Key Feedback Received
-
-- **Progress:** Impressed with CSI data capture quality. Suggested documenting the setup process thoroughly.
-
-- **ML Approach:** Recommended starting with traditional ML (Random Forest, SVM) before trying deep learning. Emphasized the importance of a diverse training dataset.
-
-- **Data Collection:** Suggested recruiting volunteers for fall simulation data. Reminded about safety protocols.
-
-## Action Items
-
-| Priority | Task | Deadline |
-|----------|------|----------|
-| High | Create data collection protocol | Week 4 |
-| High | Implement basic fall classifier | Week 5 |
-| Medium | Document hardware setup | Week 4 |
-| Medium | Plan volunteer data collection | Week 5 |
-
-## Notes for Next Meeting
-
-- Demonstrate basic fall detection working
-- Present initial accuracy metrics
-    `,
-    date: '2025-02-01',
-    readingTime: '3 min read',
-    tags: ['Meeting', 'Progress', 'ML Strategy'],
-    featured: false,
-    category: 'supervisor-meeting',
-    imageUrl: 'https://images.unsplash.com/photo-1522071823991-b99c5517a7EB?auto=format&fit=crop&q=80&w=1200',
-  },
   {
     slug: 'week-4-wbs-and-gantt-chart',
     title: 'Week 4: WBS and Gantt Chart',
